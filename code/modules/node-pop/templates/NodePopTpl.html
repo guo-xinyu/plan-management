@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h5 class="modal-title">{{RATING_NODE}}</h5>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" onkeydown="if(event.keyCode===13)return false;">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="form-group required">
+                    <label class="col-md-4 control-label">{{RATING_NODE_NAME}}</label>
+                    <div class="col-md-8">
+                        <input type="text" name="bwfNodeName" class="form-control js-bwf-node-name" data-rule="required;length[~60]" placeholder="{{RATING_NODE_NAME}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 text-right">
+                <button type="button" class="btn btn-min-width btn-primary js-ok" title="{{COMMON_OK}}">{{COMMON_OK}}</button>
+                <button type="button" class="btn btn-min-width btn-default js-cancel" title="{{COMMON_CANCEL}}" data-dismiss="modal">{{COMMON_CANCEL}}</button>
+            </div>
+        </div>
+    </form>
+</div>

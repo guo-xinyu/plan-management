@@ -1,0 +1,18 @@
+{
+  "drawStepNameMode": {
+    "usual": "usual",
+    "selected": "selected"
+  },
+  "drawBwfNodeNameMode": {
+    "real": "real",
+    "refered": "refered"
+  },
+  "drawBwfStepGoLineMode": {
+    "go": "go",
+    "output": "output"
+  },
+  "drawBwfStepSymbolMode": {
+    "usual": "usual",
+    "hasOutput": "hasOutput"
+  }
+}
