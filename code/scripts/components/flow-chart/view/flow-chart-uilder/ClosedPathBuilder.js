@@ -1,11 +1,11 @@
-define(function() {
-  function _generateStepUsualSymbolPath(position, radius) {
+class GenerateClosePath {
+  generateStepUsualSymbolPath(position, radius) {
     var path = new Path2D();
     path.arc(position[0], position[1], radius, 0, Math.PI * 2);
     return path;
   }
 
-  function _generateStepHasOutputSymbolPath(position, radius, rotatingDegree) {
+  generateStepHasOutputSymbolPath(position, radius, rotatingDegree) {
     var path = new Path2D();
     const lineXOffset = radius * Math.sin(rotatingDegree);
     const lineYOffset = radius * Math.cos(rotatingDegree);
@@ -59,15 +59,11 @@ define(function() {
     return path;
   }
 
-  function _generateRectanglePath(position, width, height) {
+  generateRectanglePath(position, width, height) {
     var path = new Path2D();
     path.rect(position[0], position[1], width, height);
     return path;
   }
+}
 
-  return {
-    generateStepUsualSymbolPath: _generateStepUsualSymbolPath,
-    generateStepHasOutputSymbolPath: _generateStepHasOutputSymbolPath,
-    generateRectanglePath: _generateRectanglePath
-  };
-});
+export { GenerateClosePath };
