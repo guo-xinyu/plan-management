@@ -1,5 +1,0 @@
-class ModelObserver {
-
-}
-
-export { ModelObserver };
