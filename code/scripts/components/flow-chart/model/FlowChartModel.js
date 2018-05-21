@@ -12,8 +12,10 @@ class FlowChartModel {
     }
     this[observers].push(observer);
   }
-  publish() {
-
+  publish(data) {
+    for (let observer of this[observers]) {
+      observer.update(data);
+    }
   }
 }
 
