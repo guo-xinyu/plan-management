@@ -10,8 +10,7 @@ class CompositeData {
   }
   addChild(child) {
     if (!(child instanceof CompositeData)) {
-      let err = new Error('CompositeData.children僅可包含CompositeData的實例。');
-      throw err;
+      throw new Error('CompositeData.children僅可包含CompositeData的實例。');
     }
     this.children.push(child);
   }
