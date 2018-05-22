@@ -1,6 +1,6 @@
 const handler = Symbol();
 
-class ObserverUtil {
+class Observer {
   constructor(handler) {
     this[handler] = handler;
   }
@@ -9,4 +9,4 @@ class ObserverUtil {
   }
 }
 
-export { ObserverUtil };
+export { Observer };
