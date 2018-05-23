@@ -1,21 +1,15 @@
-import { ObserverUtil } from '../../../utils/ObserveUtil.js';
+import { Model } from '../../../../design-pattern-character/model-view-controller/Model.js';
+// import { FactoryUserData } from './factory-data/FactoryUserData.js';
+import { FlowChartAction } from '../actions/FlowChartAction.js';
 
-const observers = Symbol();
+// const factoryUserData = Symbol();
+const flowChartAction = Symbol();
 
-class FlowChartModel {
-  constructor() {
-    this[observers] = [];
-  }
-  addObserver(observer) {
-    if (!(observer instanceof ObserverUtil)) {
-      throw new Error('請向FlowChartModel的觀察者成員中添加ObserveUtil的實例。');
-    }
-    this[observers].push(observer);
-  }
-  publish(data) {
-    for (let observer of this[observers]) {
-      observer.update(data);
-    }
+class FlowChartModel extends Model {
+  constructor(data) {
+    // const userData=
+    super();
+    this[flowChartAction] = new FlowChartAction();
   }
 }
 

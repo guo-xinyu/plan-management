@@ -6,7 +6,7 @@ function finalComposite(entity, viewData) {
   return { entity, viewData };
 }
 
-class FactoryData {
+class FactoryUserData {
   constructor() {
     this[factoryViewData] = new FactoryViewData();
   }
@@ -21,4 +21,4 @@ class FactoryData {
   }
 }
 
-export { FactoryData };
+export { FactoryUserData };

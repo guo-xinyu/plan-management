@@ -1,7 +1,7 @@
-// define(function () {
-//   return {
-//     qryWorkflowDetail: function (workFlowId, success) {
-//       return fish.get('tp/bwfWorkflow/' + workFlowId, success);
-//     }
-//   };
-// });
+class FlowChartAction {
+  static async qryWorkflowDetail(workFlowId, success) {
+    return {};
+  }
+}
+
+export { FlowChartAction };
