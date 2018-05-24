@@ -1,7 +1,7 @@
 import { FactoryUserData } from './FactoryUserData.js';
 import { CompositeData } from '../composite-data/CompositeData.js';
 
-const factoryUserData = Symbol();
+const factoryUserData = new FactoryUserData();
 // const produceComponent = Symbol();
 const hierarchy = [
   'workflow',
@@ -22,22 +22,24 @@ function produceComponent(workflowData, componentHierarchy) {
     Reflect.deleteProperty(currentData, `${componentHierarchy[1]}List`);
   }
 
-  let composite = new CompositeData(this[factoryUserData].produceUserData(currentData,
-    currentData[`${componentHierarchy[0]}Name`]));
+  const userData = factoryUserData.produceUserData(currentData,
+    currentData[`${componentHierarchy[0]}Name`]);
+
+  let composite = new CompositeData(userData.name, userData.entityData);
   if (children.length >= 1) {
     for (let child of children) {
-      composite.addChild(produceComponent.call(this, child, componentHierarchy.slice(1)));
+      composite.addChild(produceComponent(child, componentHierarchy.slice(1)));
     }
   }
   return composite;
 }
 
 class FactoryCompositeData {
-  constructor() {
-    this[factoryUserData] = new FactoryUserData();
-  }
+  // constructor() {
+  //   this[factoryUserData] = new FactoryUserData();
+  // }
   produceCompositeData(workflowData) {
-    produceComponent.call(this, workflowData, hierarchy);
+    return produceComponent(workflowData, hierarchy);
   }
 }
 
