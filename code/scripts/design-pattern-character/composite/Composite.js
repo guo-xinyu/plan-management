@@ -1,14 +1,14 @@
 const id = Symbol();
 const name = Symbol();
-const userData = Symbol();
+const entityData = Symbol();
 const children = Symbol();
 
 class Composite {
-  constructor(data) {
+  constructor(compositeName, data) {
     this[id] = Symbol();
-    this[name] = data.name;
+    this[name] = compositeName;
     // 葉子（leaf）節點
-    this[userData] = data;
+    this[entityData] = data;
     // 子節點
     this[children] = [];
   }
@@ -18,11 +18,11 @@ class Composite {
   getName() {
     return this[name];
   }
-  getUserData() {
-    return this[userData];
+  getEntityData() {
+    return this[entityData];
   }
-  setUserData(toSetUserData) {
-    this[userData] = toSetUserData;
+  setEntityData(toSetUserData) {
+    this[entityData] = toSetUserData;
   }
   addChild(child) {
     if (!(child instanceof Composite)) {

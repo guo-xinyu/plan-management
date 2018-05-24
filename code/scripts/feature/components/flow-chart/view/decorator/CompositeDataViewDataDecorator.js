@@ -1,10 +1,11 @@
 import { CompositeData } from '../../model/composite-data/CompositeData.js';
+import { Decorator } from '../../../../../design-pattern-character/decorator/Decorator.js';
 import { FactoryViewData } from '../factory-view-data/FactoryViewData.js';
 
 const viewData = Symbol();
 const factoryViewData = Symbol();
 
-class CompositeDataViewDataDecorator extends CompositeData {
+class CompositeDataViewDataDecorator extends Decorator {
   constructor(compositeData) {
     if (!(compositeData instanceof CompositeData)) {
       throw new Error('CompositeDataViewDataDecorator僅可裝飾CompositeData');

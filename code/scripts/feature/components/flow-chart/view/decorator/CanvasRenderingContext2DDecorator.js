@@ -1,7 +1,7 @@
 class CanvasRenderingContext2DDecorator {
   static splitString2SomeLines(str, linePixelLimit) {
     const strArray = str.split(/\s+/g);
-    var newString = '';
+    let newString = '';
     for (let item of strArray) {
       if (!item) {
         continue;
@@ -19,7 +19,7 @@ class CanvasRenderingContext2DDecorator {
     return newString;
   }
   static cutString(string, pixelLimit) {
-    var cuttedString = '';
+    let cuttedString = '';
     for (let char of string) {
       let tmpStr = cuttedString + char + '…';
       if (this.measureText(tmpStr).width > pixelLimit) {

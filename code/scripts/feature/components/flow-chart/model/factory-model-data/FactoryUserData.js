@@ -1,24 +1,29 @@
-import { FactoryViewData } from './FactoryViewData.js';
-
-const factoryViewData = Symbol();
-
-function finalComposite(entity, viewData) {
-  return { entity, viewData };
-}
+// function finalComposite(entity, name) {
+//   if (typeof entity !== 'object') {
+//     throw new Error('finalComposite的第一個參數必須是對象。');
+//   }
+//   if (typeof name !== 'string') {
+//     throw new Error('finalComposite的第一個參數必須是字符串。');
+//   }
+//   return { entity, name };
+// }
 
 class FactoryUserData {
-  constructor() {
-    this[factoryViewData] = new FactoryViewData();
+  produceUserData(entityData, name) {
+    if (typeof entityData !== 'object') {
+      throw new Error('finalComposite的第一個參數必須是對象。');
+    }
+    if (typeof name !== 'string') {
+      throw new Error('finalComposite的第一個參數必須是字符串。');
+    }
+    return { entityData, name };
   }
-  produceWorkflowCompositeData(workflowData, path) {
-    return finalComposite(workflowData, this[factoryViewData].produceViewData(workflowData.workflowName, path));
-  }
-  produceNodeCompositeData(nodeData, path) {
-    return finalComposite(nodeData, this[factoryViewData].produceViewData(nodeData.nodeName, path));
-  }
-  produceStepCompositeData(stepData, path) {
-    return finalComposite(stepData, this[factoryViewData].produceViewData(stepData.sortRuleName, path));
-  }
+  // produceNodeCompositeData(nodeData) {
+  //   return finalComposite(nodeData, nodeData.nodeName);
+  // }
+  // produceStepCompositeData(stepData) {
+  //   return finalComposite(stepData, stepData.sortRuleName);
+  // }
 }
 
 export { FactoryUserData };
