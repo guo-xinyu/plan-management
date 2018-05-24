@@ -4,6 +4,11 @@ const userData = Symbol();
 
 class CompositeData extends Composite {
   constructor(type, path, data, nameField, idNumber) {
+    if (data instanceof CompositeData) {
+      // 複製構造函數
+      super();
+      return Object.assign(this, data);
+    }
     super(data);
     this.name = data[nameField];
     this.path = path;
