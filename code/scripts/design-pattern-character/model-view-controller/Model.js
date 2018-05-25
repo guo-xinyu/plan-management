@@ -29,6 +29,10 @@ class Model {
   removeObservers() {
 
   }
+  updateData(uData) {
+    this[data] = uData;
+    this.publish(this[data]);
+  }
   publish() {
     for (let observser of this[observers]) {
       observser.update(this[data]);

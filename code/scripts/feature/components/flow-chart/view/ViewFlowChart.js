@@ -1,6 +1,6 @@
 const modelClass = Symbol();
 
-class FlowChartView {
+class ViewFlowChart {
   constructor(flowChartModel) {
     this[modelClass] = flowChartModel;
   }
@@ -11,4 +11,4 @@ class FlowChartView {
   }
 }
 
-export { FlowChartView };
+export { ViewFlowChart };
