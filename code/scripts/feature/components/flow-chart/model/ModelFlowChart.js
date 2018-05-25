@@ -17,12 +17,13 @@ class ModelFlowChart extends Model {
   }
   qryWorkflowDetail() {
     proxyFlowChartModel.qryWorkflowDetail().then(result => {
-      const compositeData = factoryCompositeData.produceCompositeData(result);
-      this.updateData(compositeData);
+      this.updateData(factoryCompositeData.produceCompositeData(result));
     });
   }
-  updateRemoteModel() {
-
+  updateRemoteModel(data) {
+    proxyFlowChartModel.modWorkflow(data).then(() => {
+      this.updateData(factoryCompositeData.produceCompositeData(data));
+    });
   }
 }
 
