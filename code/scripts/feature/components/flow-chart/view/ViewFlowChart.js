@@ -1,7 +1,7 @@
 import { View } from '../../../../design-pattern-character/model-view-controller/View.js';
 import { ModelFlowChart } from '../model/ModelFlowChart.js';
 
-const modelClass = Symbol();
+const handleModelUpdate = Symbol();
 
 class ViewFlowChart extends View {
   constructor(flowChartModel) {
@@ -9,7 +9,10 @@ class ViewFlowChart extends View {
       throw new Error('');
     }
     super(flowChartModel);
-    this[modelClass] = flowChartModel;
+    // this[modelClass] = flowChartModel;
+  }
+  [handleModelUpdate](data) {
+    this.draw(data);
   }
   draw(data) {
     if (!(data instanceof ModelFlowChart)) {

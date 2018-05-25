@@ -36,6 +36,9 @@ class Composite {
     }
     this[children].filter(item => item.id !== id);
   }
+  getChildren() {
+    return this[children];
+  }
   accept(visitor) {
     visitor.visit(this);
   }
