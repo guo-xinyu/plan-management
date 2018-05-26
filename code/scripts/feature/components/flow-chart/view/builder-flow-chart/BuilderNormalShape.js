@@ -1,4 +1,4 @@
-class DrawNormalShape {
+class BuilderNormalShape {
   drawLine(startPosition, endPosition, lineWidth, lineDash, color, ctx) {
     var path = new Path2D();
     path.moveTo(startPosition[0], startPosition[1]);
@@ -24,4 +24,4 @@ class DrawNormalShape {
   }
 }
 
-export { DrawNormalShape };
+export { BuilderNormalShape };

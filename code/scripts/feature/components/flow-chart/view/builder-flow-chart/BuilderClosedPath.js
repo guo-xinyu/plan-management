@@ -1,11 +1,11 @@
 class BuilderClosedPath {
-  generateStepUsualSymbolPath(position, radius) {
+  buildStepUsualSymbolPath(position, radius) {
     var path = new Path2D();
     path.arc(position[0], position[1], radius, 0, Math.PI * 2);
     return path;
   }
 
-  generateStepHasOutputSymbolPath(position, radius, rotatingDegree) {
+  buildStepHasOutputSymbolPath(position, radius, rotatingDegree) {
     var path = new Path2D();
     const lineXOffset = radius * Math.sin(rotatingDegree);
     const lineYOffset = radius * Math.cos(rotatingDegree);
@@ -59,7 +59,7 @@ class BuilderClosedPath {
     return path;
   }
 
-  generateRectanglePath(position, width, height) {
+  buildRectanglePath(position, width, height) {
     var path = new Path2D();
     path.rect(position[0], position[1], width, height);
     return path;
