@@ -31,9 +31,9 @@ class Model {
   }
   updateData(uData) {
     this[data] = uData;
-    this.publish(this[data]);
+    this._publish(this[data]);
   }
-  publish() {
+  _publish() {
     for (let observser of this[observers]) {
       observser.update(this[data]);
     }

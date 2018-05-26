@@ -1,4 +1,12 @@
-class CanvasRenderingContext2DDecorator {
+import { Decorator } from '../../../../../design-pattern-character/decorator/Decorator.js';
+
+class CanvasRenderingContext2DDecorator extends Decorator {
+  constructor(ctx) {
+    if (!(ctx instanceof CanvasRenderingContext2D)) {
+      throw new Error('CanvasRenderingContext2D僅可裝飾CompositeData');
+    }
+    super(ctx);
+  }
   static splitString2SomeLines(str, linePixelLimit) {
     const strArray = str.split(/\s+/g);
     let newString = '';

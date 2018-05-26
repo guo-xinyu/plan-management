@@ -1,4 +1,4 @@
-class GenerateClosePath {
+class BuilderClosedPath {
   generateStepUsualSymbolPath(position, radius) {
     var path = new Path2D();
     path.arc(position[0], position[1], radius, 0, Math.PI * 2);
@@ -66,4 +66,4 @@ class GenerateClosePath {
   }
 }
 
-export { GenerateClosePath };
+export { BuilderClosedPath };

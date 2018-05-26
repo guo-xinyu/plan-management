@@ -15,7 +15,7 @@ class View {
     // this[model].addObserver(this[handleModelUpdate].bind(this));
   }
   initObserverModelUpdate(handleModelUpdate) {
-    let observerModelUpdate = new Observer(handleModelUpdate.bind(this));
+    let observerModelUpdate = new Observer(handleModelUpdate);
     this[observerIn].push(observerModelUpdate);
     this[model].addObserver(observerModelUpdate);
   }
