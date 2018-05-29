@@ -1,11 +1,11 @@
-class BuilderClosedPath {
-  buildStepUsualSymbolPath(position, radius) {
+class TeamClosedPath {
+  fabricateStepUsualSymbolPath(position, radius) {
     var path = new Path2D();
     path.arc(position[0], position[1], radius, 0, Math.PI * 2);
     return path;
   }
 
-  buildStepHasOutputSymbolPath(position, radius, rotatingDegree) {
+  fabricateStepHasOutputSymbolPath(position, radius, rotatingDegree) {
     var path = new Path2D();
     const lineXOffset = radius * Math.sin(rotatingDegree);
     const lineYOffset = radius * Math.cos(rotatingDegree);
@@ -59,11 +59,11 @@ class BuilderClosedPath {
     return path;
   }
 
-  buildRectanglePath(position, width, height) {
+  fabricateRectanglePath(position, width, height) {
     var path = new Path2D();
     path.rect(position[0], position[1], width, height);
     return path;
   }
 }
 
-export { BuilderClosedPath };
+export { TeamClosedPath };
