@@ -1,30 +1,36 @@
 import { View } from '../../../../design-pattern-character/model-view-controller/View.js';
 import { ModelFlowChart } from '../model/ModelFlowChart.js';
-import { CompositeDataViewDataDecorator } from './decorator/CompositeDataViewDataDecorator.js';
+import { DecoratorCompositeDataViewData } from './decorator/DecoratorCompositeDataViewData.js';
 // import { IteratorPreOrderCompositeData } from './iterator-composite-data/IteratorPreOrderCompositeData.js';
 import { DirectorDraw } from './director/DirectorDraw.js';
-import { CanvasRenderingContext2DDecorator } from './decorator/CanvasRenderingContext2DDecorator.js';
+import { DecoratorCanvasRenderingContext2D } from './decorator/DecoratorCanvasRenderingContext2D.js';
 
 // const handleModelUpdate = Symbol();
 // const drawDirector = Symbol();
 const drawContext = Symbol();
+const themeColor = '#8c8c8c';
 
 class ViewFlowChart extends View {
   constructor(flowChartModel, ctx) {
     if (!(flowChartModel instanceof ModelFlowChart)) {
       throw new Error('ViewFlowChart僅可爲ModelFlowChart的視圖。');
     }
-    super(flowChartModel);
+    super(flowChartModel, themeColor);
     super.initObserverModelUpdate(this._handleModelUpdate.bind(this));
     // this[drawDirector] = new DrawDirector();
-    this[drawContext] = new CanvasRenderingContext2DDecorator(ctx);
+    this[drawContext] = new DecoratorCanvasRenderingContext2D(ctx);
     // this[modelClass] = flowChartModel;
   }
   _handleModelUpdate(data) {
-    if (!(data instanceof CompositeDataViewDataDecorator)) {
-      throw new Error('請輸入CompositeDataViewDataDecorator的實例。');
+    if (!(data instanceof DecoratorCompositeDataViewData)) {
+      throw new Error('請輸入DecoratorCompositeDataViewData的實例。');
     }
     this.draw(data);
+  }
+  transform(origin) {
+    if (!(origin instanceof Array) || origin.length !== 2) {
+      throw new Error('請以一個長度爲二的數組變换原點。');
+    }
   }
   draw(data) {
     const director = new DirectorDraw(this[drawContext]);
