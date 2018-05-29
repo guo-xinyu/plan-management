@@ -6,7 +6,8 @@ class FactoryViewData {
     if (!(path instanceof Path2D)) {
       throw new Error('FactoryViewData的path原料僅可爲Path2D。');
     }
-    return { name, path };
+    let color = '';
+    return { name, path, color };
   }
 }
 

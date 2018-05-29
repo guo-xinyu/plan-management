@@ -185,51 +185,51 @@ class TeamAssembly {
     return addChildrenPath(bwfStepGroupNode, bwfStepGroupNode.children);
   }
 
-  draw(bwfWorkflowGroupNode, ctx, animationState = {}, basePoint = this._basePoint) {
-    this._basePoint = basePoint;
-    ctx.clearRect(0, 0, ctx.canvas.getAttribute('width'), ctx.canvas.getAttribute('height'));
-    this._animationState.id = animationState.id;
-    this._animationState.animationMode = animationState.animationMode;
-    this._animationState.offsetX = animationState.offsetX;
-    this._animationState.offsetY = animationState.offsetY;
+  // draw(bwfWorkflowGroupNode, ctx, animationState = {}, basePoint = this._basePoint) {
+  //   this._basePoint = basePoint;
+  //   ctx.clearRect(0, 0, ctx.canvas.getAttribute('width'), ctx.canvas.getAttribute('height'));
+  //   this._animationState.id = animationState.id;
+  //   this._animationState.animationMode = animationState.animationMode;
+  //   this._animationState.offsetX = animationState.offsetX;
+  //   this._animationState.offsetY = animationState.offsetY;
 
-    var bwfNodeGroupNodeArray = [];
-    for (let child of bwfWorkflowGroupNode.children) {
-      if (child.type === this[teamConcept].bwfNodeGroup) {
-        bwfNodeGroupNodeArray.push(child);
-      }
-    }
+  //   var bwfNodeGroupNodeArray = [];
+  //   for (let child of bwfWorkflowGroupNode.children) {
+  //     if (child.type === this[teamConcept].bwfNodeGroup) {
+  //       bwfNodeGroupNodeArray.push(child);
+  //     }
+  //   }
 
-    for (let [index, bwfNodeGroupNode] of bwfNodeGroupNodeArray.entries()) {
-      const nodeBasePosition = [
-        basePoint[0],
-        basePoint[1] + (index * this._nodeGroupHeight)
-      ];
-      bwfNodeGroupNode = this.drawGroupOfNode(bwfNodeGroupNode, nodeBasePosition, index, ctx,
-        bwfWorkflowGroupNode.userData.bwfNodeList);
-    }
-    return addChildrenPath(bwfWorkflowGroupNode, bwfWorkflowGroupNode.children);
-  }
+  //   for (let [index, bwfNodeGroupNode] of bwfNodeGroupNodeArray.entries()) {
+  //     const nodeBasePosition = [
+  //       basePoint[0],
+  //       basePoint[1] + (index * this._nodeGroupHeight)
+  //     ];
+  //     bwfNodeGroupNode = this.drawGroupOfNode(bwfNodeGroupNode, nodeBasePosition, index, ctx,
+  //       bwfWorkflowGroupNode.userData.bwfNodeList);
+  //   }
+  //   return addChildrenPath(bwfWorkflowGroupNode, bwfWorkflowGroupNode.children);
+  // }
 
-  animate(animationState, bwfWorkflowGroupNode, ctx) {
-    if (animationState.animationMode === this[teamAnimationState].jumpTo) {
-      let basePoint = [];
-      let idArray = animationState.id.split('_');
-      // var bwfStep = _getNodeId(bwfWorkflowGroupNode, animationState.id);
-      basePoint = [
-        5, -this._nodeGroupHeight *
-        getIndexOfBwfNodeListByNodeId(bwfWorkflowGroupNode.userData.bwfNodeList, Number(idArray[1]))
-      ];
-      var result = this.draw(bwfWorkflowGroupNode, ctx, animationState, basePoint);
-      result.basePoint = basePoint;
-      return result;
-    }
+  // animate(animationState, bwfWorkflowGroupNode, ctx) {
+  //   if (animationState.animationMode === this[teamAnimationState].jumpTo) {
+  //     let basePoint = [];
+  //     let idArray = animationState.id.split('_');
+  //     // var bwfStep = _getNodeId(bwfWorkflowGroupNode, animationState.id);
+  //     basePoint = [
+  //       5, -this._nodeGroupHeight *
+  //       getIndexOfBwfNodeListByNodeId(bwfWorkflowGroupNode.userData.bwfNodeList, Number(idArray[1]))
+  //     ];
+  //     var result = this.draw(bwfWorkflowGroupNode, ctx, animationState, basePoint);
+  //     result.basePoint = basePoint;
+  //     return result;
+  //   }
 
-    return this.draw(bwfWorkflowGroupNode, ctx, animationState);
-    // window.requestAnimationFrame(function() {
+  //   return this.draw(bwfWorkflowGroupNode, ctx, animationState);
+  //   // window.requestAnimationFrame(function() {
 
-    // });
-  }
+  //   // });
+  // }
 
   _drawStepGoLine(stepIndex, nodeIndex, nodeBasePosition, ctx) {
     const startPosition = [
