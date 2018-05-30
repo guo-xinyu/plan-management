@@ -15,6 +15,20 @@ class TeamClosedPath {
     return this.fabricateStepSymbolPathState;
   }
 
+  fabricateRectanglePath(position, size) {
+    if (typeof position[0] !== 'number' || Number.isNaN(position[0]) ||
+      typeof position[1] !== 'number' || Number.isNaN(position[0])) {
+      throw new Error('fabricateRectanglePath方法的第一個參數須爲一個長度爲二的數字數組。');
+    }
+    if (typeof size.width !== 'number' || Number.isNaN(size.width) ||
+      typeof size.height !== 'number' || Number.isNaN(size.height)) {
+      throw new Error('fabricateRectanglePath方法的第二個參數須有width和height兩種屬性，且兩種屬性的值須爲數字。');
+    }
+    let path = new Path2D();
+    path.rect(position[0], position[1], size.width, size.height);
+    return path;
+  }
+
   fabricateStepSymbolPath(position, radius, state, rotatingDegree) {
     let path = new Path2D();
     if (state === this.fabricateStepSymbolPathState.usual) {
@@ -72,7 +86,7 @@ class TeamClosedPath {
       path.closePath();
       return path;
     }
-    throw new Error('繪製步驟標志僅有“普通（usual）”、“中轉（transfer）”兩種狀態。');
+    throw new Error('fabricateStepSymbolPath方法僅有“普通（usual）”、“中轉（transfer）”兩種狀態。');
   }
 
   // fabricateStepHasOutputSymbolPath(position, radius, rotatingDegree) {
@@ -128,12 +142,6 @@ class TeamClosedPath {
   //   path.closePath();
   //   return path;
   // }
-
-  fabricateRectanglePath(position, width, height) {
-    var path = new Path2D();
-    path.rect(position[0], position[1], width, height);
-    return path;
-  }
 }
 
 export { TeamClosedPath };

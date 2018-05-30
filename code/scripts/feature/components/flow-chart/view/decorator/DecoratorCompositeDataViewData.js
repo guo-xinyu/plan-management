@@ -5,7 +5,7 @@ import { FactoryViewData } from '../factory-view-data/FactoryViewData.js';
 const viewData = Symbol();
 const factoryViewData = Symbol();
 
-class CompositeDataViewDataDecorator extends Decorator {
+class DecoratorCompositeDataViewData extends Decorator {
   constructor(compositeData) {
     if (!(compositeData instanceof CompositeData)) {
       throw new Error('CompositeDataViewDataDecorator僅可裝飾CompositeData');
@@ -25,4 +25,4 @@ class CompositeDataViewDataDecorator extends Decorator {
   // }
 }
 
-export { CompositeDataViewDataDecorator };
+export { DecoratorCompositeDataViewData };

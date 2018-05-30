@@ -1,11 +1,24 @@
 import { Decorator } from '../../../../../design-pattern-character/decorator/Decorator.js';
 
-class CanvasRenderingContext2DDecorator extends Decorator {
+class DecoratorCanvasRenderingContext2D extends Decorator {
   constructor(ctx) {
     if (!(ctx instanceof CanvasRenderingContext2D)) {
       throw new Error('CanvasRenderingContext2D僅可裝飾CompositeData');
     }
     super(ctx);
+  }
+  static measureTextArea(str, fontSize, fontFamily) {
+    if (typeof str !== 'string') {
+      throw new Error('measureTextArea方法僅可丈量字符串的顯示區域。');
+    }
+    if (typeof fontSize !== 'number' || Number.isNaN(fontSize)) {
+      throw new Error('請以數字定義measureTextArea方法中字符串的字號。');
+    }
+    if (typeof fontFamily !== 'string') {
+      throw new Error('請以字符串定義measureTextArea方法中字符串的字體。');
+    }
+    this.font = `${fontSize}px ${fontFamily}`;
+    return this.measureText(str);
   }
   static splitString2SomeLines(str, linePixelLimit) {
     const strArray = str.split(/\s+/g);
@@ -48,4 +61,4 @@ class CanvasRenderingContext2DDecorator extends Decorator {
   }
 }
 
-export { CanvasRenderingContext2DDecorator };
+export { DecoratorCanvasRenderingContext2D };

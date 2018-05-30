@@ -53,7 +53,7 @@ class TeamAssembly {
     // this._nodeGroupHeight = 250;
     // this._stepGoLineYOffset = 95;
     // this._nameSymbolBlank = 6;
-    // this.this.this._basePoint = [5, 0];
+    // this._basePoint = [5, 0];
     this._animationState = {
       animationMode: '',
       id: '',
