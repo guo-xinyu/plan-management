@@ -1,0 +1,5 @@
+class TeamDesign {
+
+}
+
+export { TeamDesign };

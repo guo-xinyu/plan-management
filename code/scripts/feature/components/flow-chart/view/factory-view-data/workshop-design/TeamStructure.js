@@ -1,4 +1,4 @@
-class TeamDesign {
+class TeamStructure {
   constructor() {
     this.outputRotatingDegree = Math.PI / 4;
     this.stepInterval = 120;
@@ -27,4 +27,4 @@ class TeamDesign {
   }
 }
 
-export { TeamDesign };
+export { TeamStructure };

@@ -139,8 +139,8 @@ class TeamAssembly {
           stepBasePosition[0] = nodeBasePosition[0] + (this[teamDesign].stepInterval / 2);
         }
       }
-      newBwfNodeGroupChidren.push(this.drawGroupOfStep(bwfStepGroupNode, stepBasePosition, nodeIndex,
-        ctx, bwfNodeList));
+      newBwfNodeGroupChidren.push(this._drawGroupOfStep(bwfStepGroupNode, stepBasePosition, nodeIndex, ctx,
+        bwfNodeList));
     }
 
     bwfNodeGroupNode.children = newBwfNodeGroupChidren;
@@ -148,7 +148,7 @@ class TeamAssembly {
     return addChildrenPath(bwfNodeGroupNode, bwfNodeGroupNode.children);
   }
 
-  drawGroupOfStep(bwfStepGroupNode, stepBasePosition, index, ctx, bwfNodeList) {
+  _drawGroupOfStep(bwfStepGroupNode, stepBasePosition, index, ctx, bwfNodeList) {
     const nameBasePosition = [
       stepBasePosition[0],
       stepBasePosition[1] - this._nameSymbolBlank
