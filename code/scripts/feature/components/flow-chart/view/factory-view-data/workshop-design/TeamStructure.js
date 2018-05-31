@@ -12,7 +12,8 @@ class TeamStructure {
     this.nodeNameEdigeSize = 0;
     this.stepGoLineWidth = 3;
     this.bwfStepNameBlank = 10;
-    this.nodeRightPadding = 0;
+    this.nodeLeftPadding = 0;
+    this.nodeTopPadding = 0;
     this.fontFamily = 'sans-serif';
   }
   // get outputRotatingDegree() {

@@ -1,4 +1,4 @@
-class TeamClosedPath {
+class TeamPath {
   constructor() {
     this.fabricateStepSymbolPathState = {
       usual: Symbol(),
@@ -11,9 +11,9 @@ class TeamClosedPath {
   //   return path;
   // }
 
-  get fabricateStepSymbolPathState() {
-    return this.fabricateStepSymbolPathState;
-  }
+  // get fabricateStepSymbolPathState() {
+  //   return this.fabricateStepSymbolPathState;
+  // }
 
   fabricateRectanglePath(position, size) {
     if (typeof position[0] !== 'number' || Number.isNaN(position[0]) ||
@@ -144,4 +144,4 @@ class TeamClosedPath {
   // }
 }
 
-export { TeamClosedPath };
+export { TeamPath };
