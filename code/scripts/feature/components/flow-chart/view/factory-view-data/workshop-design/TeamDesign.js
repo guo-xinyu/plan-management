@@ -86,24 +86,20 @@ class TeamDesign {
       fontFamily: this[teamStructure].fontFamily
     };
   }
-  _compositePatternDesign(paths, strokeColor, state) {
-    let patternDesign = [];
-    for (let path of paths) {
-      patternDesign.push({
-        border: {
-          path: path
-          // style: style,
-          // width: width
-        },
-        color: {
-          // fill: fillColor,
-          stroke: strokeColor
-        }
-      });
-    }
-    return patternDesign;
+  _compositePatternDesign(path, width, style, strokeColor, fillColor) {
+    return {
+      border: {
+        path,
+        style,
+        width
+      },
+      color: {
+        fill: fillColor,
+        stroke: strokeColor
+      }
+    };
   }
-  _getTextRectanglePath(singleTextDesign) {
+  _getTextRectangleDesign(singleTextDesign) {
     const nameTextMeasureArea = this[decoratorCanvasRenderingContext2D].measureTextArea(singleTextDesign.text,
       singleTextDesign.fontSize, singleTextDesign.fontFamily);
     let nodeContentBasePoint = [];
@@ -120,17 +116,42 @@ class TeamDesign {
       default:
         break;
     }
-    return this[teamPath].fabricateRectanglePath(nodeContentBasePoint, nameTextMeasureArea);
+    return this._compositePatternDesign(
+      [this[teamPath].fabricateRectanglePath(nodeContentBasePoint, nameTextMeasureArea)], '',
+      this[designType].node.text);
+  }
+  _getLineDesign(oBasePoint, length, color, state) {
+    let serialPatternDesign = [];
+    let startPoint = [];
+    let endPoint = [];
+    switch (state) {
+      case this[designType].node.decorationLine:
+        startPoint.push(...oBasePoint);
+        endPoint.push(startPoint[0]);
+        endPoint.push(startPoint[1] + length);
+        serialPatternDesign.push(this._compositePatternDesign(
+          this[teamPath].fabricateStraightLinePath(startPoint, endPoint),
+          this[teamStructure].nodeNameDecorateLineWidth, 'solid', color, ''));
+        return serialPatternDesign;
+      case this[designType].node.railLine:
+        return serialPatternDesign;
+      case this[designType].step.symbol:
+        return serialPatternDesign;
+      case this[designType].outputNode.railLine:
+        return serialPatternDesign;
+      case this[designType].outputNode.decorationLine:
+        return serialPatternDesign;
+      default:
+        break;
+    }
+    return this[teamPath].fabricateStraightLinePath(startPoint, endPoint);
   }
   // 生産節點名字處的“綫稿”
-  fabricateNodeDesign(nodeBasePoint, index, childNum, name) {
+  fabricateNodeDesign(nodeBasePoint, color, childNum, name) {
     const nodeContentBasePoint = [
       nodeBasePoint[0] + this[teamStructure].nodeLeftPadding,
       nodeBasePoint[1] + this[teamStructure].nodeTopPadding
     ];
-
-    // const nodeNameSize = this[teamStructure].nodeNameSize;
-    // const fontFamily = this[teamStructure].fontFamily;
 
     let patternDesign = [];
     let textDesign = [];
@@ -139,10 +160,11 @@ class TeamDesign {
       this[designType].node.text);
     textDesign.push(singleTextDesign);
 
-    patternDesign.push(this._compositePatternDesign([this._getTextRectanglePath(singleTextDesign)]));
+    patternDesign.push(this._getTextRectangleDesign(singleTextDesign));
 
     // 豎綫裝飾的“綫稿”
-    // patternDesign.push(compositePatternDesign(this[teamPath].fabricateStraightLinePath()));
+    patternDesign.push(this._getLineDesign(nodeContentBasePoint, this[teamStructure].nodeNameSize, color,
+      this[designType].node.decorationLine));
     // 步驟軌道的“綫稿”
     // patternDesign.push(compositePatternDesign(this[teamPath].fabricateRectanglePath()));
     return { textDesign, patternDesign };

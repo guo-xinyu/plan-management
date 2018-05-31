@@ -19,6 +19,8 @@ class TeamStructure {
     this.nodeLeftPadding = 0;
     this.nodeTopPadding = 0;
     this.fontFamily = 'sans-serif';
+
+    this.themeColor = '#8c8c8c';
   }
   // get outputRotatingDegree() {
   //   return this.outputRotatingDegree;
