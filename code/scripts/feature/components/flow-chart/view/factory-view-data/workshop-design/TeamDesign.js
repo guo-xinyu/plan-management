@@ -64,13 +64,13 @@ class TeamDesign {
     switch (state) {
       case this[designType].outputNode.text:
       case this[designType].node.text:
-        foulLineDirection += 'left';
+        foulLineDirection = 'left';
         basePoint.push(oBasePoint[0] + this[teamStructure].this.nodeNameDecorateLineWidth +
           this[teamStructure].nodeNameTextLineBlank);
         basePoint.push(oBasePoint[1] + (this[teamStructure].nodeNameSize / 2));
         break;
       case this[designType].step.text:
-        foulLineDirection += 'bottom';
+        foulLineDirection = 'bottom';
         basePoint.push(oBasePoint[0]);
         basePoint.push(oBasePoint[1] + this[teamStructure].bwfStepNameBlank);
         break;
@@ -134,9 +134,16 @@ class TeamDesign {
           this[teamStructure].nodeNameDecorateLineWidth, 'solid', color, ''));
         return serialPatternDesign;
       case this[designType].node.railLine:
+        startPoint.push(oBasePoint[0] + (this[teamStructure].stepInterval / 2));
+        startPoint.push(oBasePoint[1] + this[teamStructure].stepGoLineYOffset);
+        endPoint.push(oBasePoint[0] + (this[teamStructure].stepInterval / 2) + length);
+        endPoint.push(oBasePoint[1] + this[teamStructure].stepGoLineYOffset);
+        serialPatternDesign.push(this._compositePatternDesign(
+          this[teamPath].fabricateStraightLinePath(startPoint, endPoint),
+          this[teamStructure].stepGoLineWidth, 'solid', color, ''));
         return serialPatternDesign;
-      case this[designType].step.symbol:
-        return serialPatternDesign;
+        // case this[designType].step.symbol:
+        //   return serialPatternDesign;
       case this[designType].outputNode.railLine:
         return serialPatternDesign;
       case this[designType].outputNode.decorationLine:
@@ -145,6 +152,9 @@ class TeamDesign {
         break;
     }
     return this[teamPath].fabricateStraightLinePath(startPoint, endPoint);
+  }
+  _getStepSymbolDesign(oBasePoint, radius, color, stepSymbolState) {
+
   }
   // 生産節點名字處的“綫稿”
   fabricateNodeDesign(nodeBasePoint, color, childNum, name) {
@@ -156,8 +166,7 @@ class TeamDesign {
     let patternDesign = [];
     let textDesign = [];
     // 文字區域的“綫稿”
-    const singleTextDesign = this._compositeTextDesign(nodeContentBasePoint, nodeContentBasePoint,
-      this[designType].node.text);
+    const singleTextDesign = this._compositeTextDesign(name, nodeContentBasePoint, this[designType].node.text);
     textDesign.push(singleTextDesign);
 
     patternDesign.push(this._getTextRectangleDesign(singleTextDesign));
@@ -166,18 +175,24 @@ class TeamDesign {
     patternDesign.push(this._getLineDesign(nodeContentBasePoint, this[teamStructure].nodeNameSize, color,
       this[designType].node.decorationLine));
     // 步驟軌道的“綫稿”
-    // patternDesign.push(compositePatternDesign(this[teamPath].fabricateRectanglePath()));
+    patternDesign.push(this._getLineDesign(nodeContentBasePoint, this[teamStructure].stepInterval * (childNum - 1),
+      color, this[designType].node.railLine));
     return { textDesign, patternDesign };
   }
   // 生産步驟處的“綫稿”
-  fabricateStepDesign() {
+  fabricateStepDesign(nodeBasePoint, color, index, name) {
+    const contentBasePoint = [
+      nodeBasePoint[0] + (this[teamStructure].stepInterval * (((index * 2) + 1) / 2)),
+      nodeBasePoint[1] + this[teamStructure].stepGoLineYOffset
+    ];
     let patternDesign = [];
     let textDesign = [];
     // 文字區域的“綫稿”
-    // patternDesign.push(compositePatternDesign(this[teamPath].fabricateRectanglePath()));
-    // textDesign.push(compositeTextDesign());
+    const singleTextDesign = this._compositeTextDesign(name, contentBasePoint, this[designType].node.text);
+    textDesign.push(singleTextDesign);
+    patternDesign.push(this._getTextRectangleDesign(singleTextDesign));
     // 圓圈標志的“綫稿”
-    // patternDesign.push(compositePatternDesign(this[teamPath].fabricateRectanglePath()));
+    patternDesign.push(this._getStepSymbolDesign());
     return { textDesign, patternDesign };
   }
   // 生産輸出節點處的“綫稿”
