@@ -15,6 +15,8 @@ class TeamStructure {
     this.nodeNameDecorateLineWidth = this.stepGoLineWidth;
     this.nodeNameTextLineBlank = this.nodeNameDecorateLineWidth;
 
+    this.stepSymbolBorderWidth = 1;
+
     this.bwfStepNameBlank = 10;
     this.nodeLeftPadding = 0;
     this.nodeTopPadding = 0;

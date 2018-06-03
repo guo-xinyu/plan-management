@@ -41,6 +41,10 @@ class TeamDesign {
         decorationLine: Symbol()
       }
     };
+    this.stateStep = {
+      usual: Symbol(),
+      transfer: Symbol()
+    };
   }
   _cutString(oText, state) {
     switch (state) {
@@ -153,8 +157,24 @@ class TeamDesign {
     }
     return this[teamPath].fabricateStraightLinePath(startPoint, endPoint);
   }
-  _getStepSymbolDesign(oBasePoint, radius, color, stepSymbolState) {
-
+  _getStepSymbolDesign(oBasePoint, color, stepSymbolState) {
+    let serialPatternDesign = [];
+    switch (stepSymbolState) {
+      case this.stateStep.usual:
+        serialPatternDesign.push(this._compositePatternDesign(
+          this[teamPath].fabricateStepSymbolPath(
+            oBasePoint, this[teamStructure].stepGoLineWidth, this[teamPath].fabricateStepSymbolPathState.usual),
+          this[teamStructure].stepSymbolBorderWidth, 'solid', color, ''));
+        return serialPatternDesign;
+      case this.stateStep.transfer:
+        serialPatternDesign.push(this._compositePatternDesign(
+          this[teamPath].fabricateStepSymbolPath(oBasePoint, this[teamStructure].stepGoLineWidth,
+            this[teamPath].fabricateStepSymbolPathState.transfer, this[teamStructure].outputRotatingDegree),
+          this[teamStructure].stepSymbolBorderWidth, 'solid', this[teamStructure].themeColor, ''));
+        return serialPatternDesign;
+      default:
+        break;
+    }
   }
   // 生産節點名字處的“綫稿”
   fabricateNodeDesign(nodeBasePoint, color, childNum, name) {
@@ -180,7 +200,7 @@ class TeamDesign {
     return { textDesign, patternDesign };
   }
   // 生産步驟處的“綫稿”
-  fabricateStepDesign(nodeBasePoint, color, index, name) {
+  fabricateStepDesign(nodeBasePoint, color, index, name, state) {
     const contentBasePoint = [
       nodeBasePoint[0] + (this[teamStructure].stepInterval * (((index * 2) + 1) / 2)),
       nodeBasePoint[1] + this[teamStructure].stepGoLineYOffset
@@ -192,7 +212,7 @@ class TeamDesign {
     textDesign.push(singleTextDesign);
     patternDesign.push(this._getTextRectangleDesign(singleTextDesign));
     // 圓圈標志的“綫稿”
-    patternDesign.push(this._getStepSymbolDesign());
+    patternDesign.push(this._getStepSymbolDesign(contentBasePoint, color, state));
     return { textDesign, patternDesign };
   }
   // 生産輸出節點處的“綫稿”
