@@ -1,6 +1,7 @@
 class TeamStructure {
   constructor() {
     this.outputRotatingDegree = Math.PI / 4;
+
     this.stepInterval = 120;
     this.nodeGroupHeight = 250;
     this.stepGoLineYOffset = 95;
@@ -14,6 +15,9 @@ class TeamStructure {
     this.stepGoLineWidth = 3;
     this.nodeNameDecorateLineWidth = this.stepGoLineWidth;
     this.nodeNameTextLineBlank = this.nodeNameDecorateLineWidth;
+
+    this.outputRailSolidLengthRadio = 2 / 3;
+    this.outputRailDashedLengthRadio = 1 / 3;
 
     this.stepSymbolBorderWidth = 1;
 

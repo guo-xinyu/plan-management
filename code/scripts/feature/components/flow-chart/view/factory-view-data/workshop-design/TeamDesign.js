@@ -149,6 +149,25 @@ class TeamDesign {
         // case this[designType].step.symbol:
         //   return serialPatternDesign;
       case this[designType].outputNode.railLine:
+        {
+          const xOffset = length * Math.cos(this[teamStructure].outputRotatingDegree);
+          const yOffset = length * Math.sin(this[teamStructure].outputRotatingDegree);
+          const startPosition1 = oBasePoint;
+          const endPosition1 = [
+            oBasePoint[0] + (this[teamStructure].outputRailSolidLengthRadio * xOffset),
+            oBasePoint[1] + (this[teamStructure].outputRailSolidLengthRadio * yOffset)
+          ];
+          serialPatternDesign.push(this._compositePatternDesign(
+            this[teamPath].fabricateStraightLinePath(startPosition1, endPosition1),
+            this[teamStructure].stepGoLineWidth, 'solid', color, ''));
+          const endPosition2 = [
+            endPosition1[0] + ((1 / 3) * xOffset),
+            endPosition1[1] + ((1 / 3) * yOffset)
+          ];
+          serialPatternDesign.push(this._compositePatternDesign(
+            this[teamPath].fabricateStraightLinePath(endPosition1, endPosition2),
+            this[teamStructure].stepGoLineWidth, 'dashed', color, ''));
+        }
         return serialPatternDesign;
       case this[designType].outputNode.decorationLine:
         return serialPatternDesign;
@@ -185,17 +204,15 @@ class TeamDesign {
 
     let patternDesign = [];
     let textDesign = [];
-    // 文字區域的“綫稿”
+    // 文字區域和豎綫裝飾的“綫稿”
     const singleTextDesign = this._compositeTextDesign(name, nodeContentBasePoint, this[designType].node.text);
     textDesign.push(singleTextDesign);
 
-    patternDesign.push(this._getTextRectangleDesign(singleTextDesign));
-
-    // 豎綫裝飾的“綫稿”
-    patternDesign.push(this._getLineDesign(nodeContentBasePoint, this[teamStructure].nodeNameSize, color,
+    patternDesign.push(...this._fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color,
       this[designType].node.decorationLine));
+
     // 步驟軌道的“綫稿”
-    patternDesign.push(this._getLineDesign(nodeContentBasePoint, this[teamStructure].stepInterval * (childNum - 1),
+    patternDesign.push(...this._getLineDesign(nodeContentBasePoint, this[teamStructure].stepInterval * (childNum - 1),
       color, this[designType].node.railLine));
     return { textDesign, patternDesign };
   }
@@ -210,23 +227,38 @@ class TeamDesign {
     // 文字區域的“綫稿”
     const singleTextDesign = this._compositeTextDesign(name, contentBasePoint, this[designType].node.text);
     textDesign.push(singleTextDesign);
-    patternDesign.push(this._getTextRectangleDesign(singleTextDesign));
+    patternDesign.push(...this._getTextRectangleDesign(singleTextDesign));
     // 圓圈標志的“綫稿”
-    patternDesign.push(this._getStepSymbolDesign(contentBasePoint, color, state));
+    patternDesign.push(...this._getStepSymbolDesign(contentBasePoint, color, state));
     return { textDesign, patternDesign };
   }
   // 生産輸出節點處的“綫稿”
-  fabricateOutputNodeDesign() {
+  fabricateOutputNodeDesign(nodeBasePoint, color, name) {
     let patternDesign = [];
     let textDesign = [];
-    // 文字區域的“綫稿”
-    // patternDesign.push(compositePatternDesign(this[teamPath].fabricateRectanglePath()));
-    // textDesign.push(compositeTextDesign());
-    // 分叉軌道實綫部分的“綫稿”
-    // patternDesign.push(compositePatternDesign(this[teamPath].fabricateRectanglePath()));
-    // 分叉軌道虚綫部分的“綫稿”
-    // patternDesign.push(compositePatternDesign(this[teamPath].fabricateRectanglePath()));
+    // 分叉軌道部分的“綫稿”
+    patternDesign.push(...this._getLineDesign(nodeBasePoint, this[teamStructure].stepInterval, color,
+      this[designType].outputNode.railLine));
+    // 文字區域和豎綫裝飾的“綫稿”
+    const nodeContentBasePoint = [
+      nodeBasePoint[0] + (this[teamStructure].stepInterval * Math.cos(this[teamStructure].outputRotatingDegree)),
+      nodeBasePoint[1] + (this[teamStructure].stepInterval * Math.sin(this[teamStructure].outputRotatingDegree))
+    ];
+    const singleTextDesign = this._compositeTextDesign(name, nodeContentBasePoint, this[designType].outputNode.text);
+    textDesign.push(singleTextDesign);
+    patternDesign.push(...this._fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color,
+      this[designType].output.decorationLine));
     return { textDesign, patternDesign };
+  }
+  _fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color, state) {
+    let patternDesign = [];
+    // 文字區域的“綫稿”
+    patternDesign.push(this._getTextRectangleDesign(singleTextDesign));
+
+    // 豎綫裝飾的“綫稿”
+    patternDesign.push(this._getLineDesign(nodeContentBasePoint, this[teamStructure].nodeNameSize, color,
+      state));
+    return patternDesign;
   }
 }
 
