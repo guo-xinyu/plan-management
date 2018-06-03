@@ -2,7 +2,7 @@ import { View } from '../../../../design-pattern-character/model-view-controller
 import { ModelFlowChart } from '../model/ModelFlowChart.js';
 import { DecoratorCompositeDataViewData } from './decorator/DecoratorCompositeDataViewData.js';
 // import { IteratorPreOrderCompositeData } from './iterator-composite-data/IteratorPreOrderCompositeData.js';
-import { DirectorDraw } from './director/DirectorDraw.js';
+import { DirectorDraw } from './director-draw/DirectorDraw.js';
 import { DecoratorCanvasRenderingContext2D } from './decorator/DecoratorCanvasRenderingContext2D.js';
 
 // const handleModelUpdate = Symbol();

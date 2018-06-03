@@ -1,10 +1,12 @@
 import { DecoratorCanvasRenderingContext2D } from '../decorator/DecoratorCanvasRenderingContext2D.js';
 import { DecoratorCompositeDataViewData } from '../decorator/DecoratorCompositeDataViewData.js';
 import { BuilderNodeView } from '../builder-node-view/BuilderNodeView.js';
+import { IteratorPreOrderCompositeData } from '../iterator-composite-data/IteratorPreOrderCompositeData.js';
 
 const drawContext = Symbol();
 const builderNodeView = Symbol();
 const teamConcept = Symbol();
+// const iteratorPreOrderComposite = Symbol();
 // const compositeData = Symbol();
 
 class DirectorDraw {
@@ -43,6 +45,10 @@ class DirectorDraw {
   build(data) {
     if (!(data instanceof DecoratorCompositeDataViewData)) {
       throw new Error('本導向器僅可根據DecoratorCompositeDataViewData生成産品。');
+    }
+    let iteratorPreOrderComposite = new IteratorPreOrderCompositeData(data);
+    for (let composite of iteratorPreOrderComposite) {
+      this.draw(composite);
     }
   }
 }

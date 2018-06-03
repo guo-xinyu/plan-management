@@ -22,10 +22,9 @@ function produceComponent(workflowData, componentHierarchy) {
     Reflect.deleteProperty(currentData, `${componentHierarchy[1]}List`);
   }
 
-  const userData = factoryUserData.produceUserData(currentData,
-    currentData[`${componentHierarchy[0]}Name`]);
+  const userData = factoryUserData.produceUserData(currentData, currentData[`${componentHierarchy[0]}Name`]);
 
-  let composite = new CompositeData(userData.name, userData.entityData);
+  let composite = new CompositeData(userData.name, userData.entityData, hierarchy.length - componentHierarchy.length);
   if (children.length >= 1) {
     for (let child of children) {
       composite.addChild(produceComponent(child, componentHierarchy.slice(1)));

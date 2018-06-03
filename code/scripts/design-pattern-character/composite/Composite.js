@@ -2,11 +2,17 @@ const id = Symbol();
 const name = Symbol();
 const entityData = Symbol();
 const children = Symbol();
+const grade = Symbol();
+const rank = Symbol();
 
 class Composite {
-  constructor(compositeName, data) {
+  constructor(compositeName, data, gradeNum, rankNum) {
     this[id] = Symbol();
     this[name] = compositeName;
+    // 在整個樹中的品秩
+    this[grade] = gradeNum;
+    // 在父節點下所有子節點中的班位
+    this[rank] = rankNum;
     // 葉子（leaf）節點
     this[entityData] = data;
     // 子節點
@@ -23,6 +29,12 @@ class Composite {
   }
   setEntityData(toSetUserData) {
     this[entityData] = toSetUserData;
+  }
+  getGrade() {
+    return this[grade];
+  }
+  getRank() {
+    return this[rank];
   }
   addChild(child) {
     if (!(child instanceof Composite)) {

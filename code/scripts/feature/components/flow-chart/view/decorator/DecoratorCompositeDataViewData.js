@@ -12,7 +12,7 @@ class DecoratorCompositeDataViewData extends Decorator {
     }
     super(compositeData);
     this[factoryViewData] = new FactoryViewData();
-    this[viewData] = this[factoryViewData].produceViewData(this.getName(), new Path2D());
+    this[viewData] = this[factoryViewData].produceViewData(compositeData);
   }
   // addPath(toAddPath) {
   //   if (!(toAddPath instanceof Path2D)) {

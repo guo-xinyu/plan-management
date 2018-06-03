@@ -6,25 +6,14 @@ const teamPath = Symbol();
 const teamStructure = Symbol();
 const decoratorCanvasRenderingContext2D = Symbol();
 const designType = Symbol();
-const colors = Symbol();
 
 class TeamDesign {
-  constructor() {
+  constructor(basePoint) {
+    this._basePoint = basePoint;
     this[teamPath] = new TeamPath();
     this[teamStructure] = new TeamStructure();
     this[decoratorCanvasRenderingContext2D] = new DecoratorCanvasRenderingContext2D(new CanvasRenderingContext2D());
-    this[colors] = [
-      '#8dc434',
-      '#f5ba05',
-      '#c05fd5',
-      '#35cbd5',
-      '#f2811c',
-      '#ee68a9',
-      '#2496f5',
-      '#f1e12b',
-      '#7c81e6',
-      '#57dca5'
-    ];
+
     this[designType] = {
       node: {
         text: Symbol(),
@@ -195,8 +184,15 @@ class TeamDesign {
         break;
     }
   }
+  _getNodeBasePoint(nodeRank) {
+    return [
+      this._basePoint[0],
+      this._basePoint[1] + (this[teamStructure].nodeGroupHeight * nodeRank)
+    ];
+  }
   // 生産節點名字處的“綫稿”
-  fabricateNodeDesign(nodeBasePoint, color, childNum, name) {
+  fabricateNodeDesign(rank, color, childNum, name) {
+    const nodeBasePoint = this._getNodeBasePoint(rank);
     const nodeContentBasePoint = [
       nodeBasePoint[0] + this[teamStructure].nodeLeftPadding,
       nodeBasePoint[1] + this[teamStructure].nodeTopPadding
@@ -217,7 +213,8 @@ class TeamDesign {
     return { textDesign, patternDesign };
   }
   // 生産步驟處的“綫稿”
-  fabricateStepDesign(nodeBasePoint, color, index, name, state) {
+  fabricateStepDesign(nodeRank, color, index, name, state) {
+    const nodeBasePoint = this._getNodeBasePoint(nodeRank);
     const contentBasePoint = [
       nodeBasePoint[0] + (this[teamStructure].stepInterval * (((index * 2) + 1) / 2)),
       nodeBasePoint[1] + this[teamStructure].stepGoLineYOffset
@@ -233,7 +230,8 @@ class TeamDesign {
     return { textDesign, patternDesign };
   }
   // 生産輸出節點處的“綫稿”
-  fabricateOutputNodeDesign(nodeBasePoint, color, name) {
+  fabricateOutputNodeDesign(nodeRank, color, name) {
+    const nodeBasePoint = this._getNodeBasePoint(nodeRank);
     let patternDesign = [];
     let textDesign = [];
     // 分叉軌道部分的“綫稿”
