@@ -3,10 +3,10 @@ import { CompositeData } from '../../model/composite-data/CompositeData.js';
 
 // const compositeData = Symbol();
 
-class IteratorPreOrderCompositeData extends Iterator {
+class IteratorDfsCompositeData extends Iterator {
   constructor(iterateObj) {
     if (!(iterateObj instanceof CompositeData)) {
-      throw new Error('IteratorPreOrderCompositeData用于迭代CompositeData對象。');
+      throw new Error('IteratorDfsCompositeData用于迭代CompositeData對象。');
     }
     super(iterateObj);
     // this[compositeData] = iterateObj;
@@ -23,4 +23,4 @@ class IteratorPreOrderCompositeData extends Iterator {
   }
 }
 
-export { IteratorPreOrderCompositeData };
+export { IteratorDfsCompositeData };

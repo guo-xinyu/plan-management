@@ -1,7 +1,7 @@
 const id = Symbol();
 const name = Symbol();
 const entityData = Symbol();
-const children = Symbol();
+// const adjacentVertices = Symbol();
 const grade = Symbol();
 const rank = Symbol();
 
@@ -9,14 +9,16 @@ class Composite {
   constructor(compositeName, data, gradeNum, rankNum) {
     this[id] = Symbol();
     this[name] = compositeName;
-    // 在整個樹中的品秩
+    // 在整個圖中的品秩（本頂點與根頂點的最短距離）
     this[grade] = gradeNum;
-    // 在父節點下所有子節點中的班位
+    // 班位（在品秩路徑（確定本頂點與根頂點最短距離的路徑）上的上前一頂點的所有鄰接頂點中，本頂點所排的序位）
     this[rank] = rankNum;
-    // 葉子（leaf）節點
+    // 葉子（leaf）
     this[entityData] = data;
-    // 子節點
-    this[children] = [];
+    // 鄰接頂點
+    this._adjacentVertices = [];
+    this._visited = false;
+    // this[adjacentVertices] = [];
   }
   getId() {
     return this[id];
@@ -36,23 +38,34 @@ class Composite {
   getRank() {
     return this[rank];
   }
-  addChild(child) {
-    if (!(child instanceof Composite)) {
-      throw new Error('Composite.children僅可包含CompositeData的實例。');
+  addAdjacentVertices(id, preId) {
+    if (typeof id !== 'symbol') {
+      throw new Error('Composite的鄰接頂點鏈表僅可儲存Composite的id。');
     }
-    this[children].push(child);
-  }
-  removeChildById(id) {
-    if (!this[children].find(item => item.id === id)) {
-      throw new Error('請用該子節點的id删除該節點。');
+    if (preId && typeof preId !== 'symbol') {
+      throw new Error('請以數字指定鄰接頂點要插入的位置。');
     }
-    this[children].filter(item => item.id !== id);
+    const preIdIndex = this._adjacentVertices.findIndex(item => item === preId);
+    if (preId && !~preIdIndex) {
+      throw new Error('所指定的標的id非本頂點既有的鄰接頂點的id。');
+    }
+    this._adjacentVertices.splice(preIdIndex + 1, 0, id);
   }
-  getChildren() {
-    return this[children];
+  removeAdjacentVertexById(id) {
+    if (!~this._adjacentVertices.findIndex(item => item === id)) {
+      throw new Error('請以頂點的id切斷鄰接。');
+    }
+    this._adjacentVertices.filter(item => item !== id);
+  }
+  getAdjacentVertices() {
+    return this._adjacentVertices;
+  }
+  setVisited(isVisited) {
+    this._visited = isVisited;
   }
   accept(visitor) {
     visitor.visit(this);
+    this.setVisited(true);
   }
 }
 

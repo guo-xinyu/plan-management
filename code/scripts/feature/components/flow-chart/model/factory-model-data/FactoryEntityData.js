@@ -8,7 +8,7 @@
 //   return { entity, name };
 // }
 
-class FactoryUserData {
+class FactoryEntityData {
   produceUserData(entityData, name) {
     if (typeof entityData !== 'object') {
       throw new Error('finalComposite的第一個參數必須是對象。');
@@ -26,4 +26,4 @@ class FactoryUserData {
   // }
 }
 
-export { FactoryUserData };
+export { FactoryEntityData };
