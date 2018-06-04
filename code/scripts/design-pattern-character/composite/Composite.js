@@ -63,6 +63,9 @@ class Composite {
   setVisited(isVisited) {
     this._visited = isVisited;
   }
+  getVisited() {
+    return this._visited;
+  }
   accept(visitor) {
     visitor.visit(this);
     this.setVisited(true);
