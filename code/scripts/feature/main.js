@@ -641,3 +641,15 @@
 //     }
 //   });
 // });
+
+import { FlowChart } from './components/flow-chart/FlowChart.js';
+
+main();
+
+function main() {
+  const flowChart = new FlowChart(document.getElementById('js-plan-management-chart'));
+  if (flowChart.main) {
+    flowChart.main();
+  }
+  // console.log(flowChart);
+}

@@ -1,13 +1,14 @@
-import { Decorator } from '../../../../../design-pattern-character/decorator/Decorator.js';
+// import { Decorator } from '../../../../../design-pattern-character/decorator/Decorator.js';
 
-class DecoratorCanvasRenderingContext2D extends Decorator {
+class DecoratorCanvasRenderingContext2D {
   constructor(ctx) {
     if (!(ctx instanceof CanvasRenderingContext2D)) {
-      throw new Error('CanvasRenderingContext2D僅可裝飾CompositeData');
+      throw new Error('CanvasRenderingContext2D僅可裝飾CanvasRenderingContext2D');
     }
-    super(ctx);
+    this._ctx = ctx;
+    // super(ctx);
   }
-  static measureTextArea(str, fontSize, fontFamily) {
+  measureTextArea(str, fontSize, fontFamily) {
     if (typeof str !== 'string') {
       throw new Error('measureTextArea方法僅可丈量字符串的顯示區域。');
     }
@@ -17,10 +18,10 @@ class DecoratorCanvasRenderingContext2D extends Decorator {
     if (typeof fontFamily !== 'string') {
       throw new Error('請以字符串定義measureTextArea方法中字符串的字體。');
     }
-    this.font = `${fontSize}px ${fontFamily}`;
-    return this.measureText(str);
+    this._ctx.font = `${fontSize}px ${fontFamily}`;
+    return this._ctx.measureText(str);
   }
-  static splitString2SomeLines(str, linePixelLimit) {
+  splitString2SomeLines(str, linePixelLimit) {
     const strArray = str.split(/\s+/g);
     let newString = '';
     for (let item of strArray) {
@@ -30,7 +31,8 @@ class DecoratorCanvasRenderingContext2D extends Decorator {
       let tempStrArray = newString.split('\n');
       let tempLastLine = tempStrArray[tempStrArray.length - 1];
       let tempStr = tempLastLine + ' ' + item;
-      if (this.measureText(tempLastLine).width <= linePixelLimit && this.measureText(tempStr).width > linePixelLimit) {
+      if (this._ctx.measureText(tempLastLine).width <= linePixelLimit &&
+        this._ctx.measureText(tempStr).width > linePixelLimit) {
         newString += '\n';
       } else {
         newString += ' ';
@@ -39,11 +41,11 @@ class DecoratorCanvasRenderingContext2D extends Decorator {
     }
     return newString;
   }
-  static cutString(string, pixelLimit) {
+  cutString(string, pixelLimit) {
     let cuttedString = '';
     for (let char of string) {
       let tmpStr = cuttedString + char + '…';
-      if (this.measureText(tmpStr).width > pixelLimit) {
+      if (this._ctx.measureText(tmpStr).width > pixelLimit) {
         return cuttedString + '…';
       }
       cuttedString += char;

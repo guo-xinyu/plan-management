@@ -1,9 +1,9 @@
 import { View } from '../../../../design-pattern-character/model-view-controller/View.js';
 import { ModelFlowChart } from '../model/ModelFlowChart.js';
-import { DecoratorCompositeDataViewData } from './decorator/DecoratorCompositeDataViewData.js';
+// import { DecoratorCompositeDataViewData } from './decorator/DecoratorCompositeDataViewData.js';
 // import { IteratorPreOrderCompositeData } from './iterator-composite-data/IteratorPreOrderCompositeData.js';
 import { DirectorDraw } from './director-draw/DirectorDraw.js';
-import { DecoratorCanvasRenderingContext2D } from './decorator/DecoratorCanvasRenderingContext2D.js';
+// import { DecoratorCanvasRenderingContext2D } from './decorator/DecoratorCanvasRenderingContext2D.js';
 
 // const handleModelUpdate = Symbol();
 // const drawDirector = Symbol();
@@ -17,13 +17,15 @@ class ViewFlowChart extends View {
     }
     super(flowChartModel, themeColor);
     super.initObserverModelUpdate(this._handleModelUpdate.bind(this));
+    this._basePoint = [5, 5];
     // this[drawDirector] = new DrawDirector();
-    this[drawContext] = new DecoratorCanvasRenderingContext2D(ctx);
+    this[drawContext] = ctx;
+    // console.log(this[drawContext]);
     // this[modelClass] = flowChartModel;
   }
   _handleModelUpdate(data) {
-    if (!(data instanceof DecoratorCompositeDataViewData)) {
-      throw new Error('請輸入DecoratorCompositeDataViewData的實例。');
+    if (!(data instanceof Array)) {
+      throw new Error('請輸入DecoratorCompositeDataViewData的數組。');
     }
     this.draw(data);
   }
@@ -33,7 +35,7 @@ class ViewFlowChart extends View {
     }
   }
   draw(data) {
-    const director = new DirectorDraw(this[drawContext]);
+    const director = new DirectorDraw(this._basePoint, this[drawContext]);
     director.build(data);
     // let iteratorPreOrderCompositeData = new IteratorPreOrderCompositeData(data);
     // for (let composite of iteratorPreOrderCompositeData) {

@@ -1,4 +1,4 @@
-class FlowChartAction {
+class ProxyFlowChartModel {
   static async qryWorkflowDetail(workFlowId) {
     return {};
   }
@@ -7,4 +7,4 @@ class FlowChartAction {
   }
 }
 
-export { FlowChartAction };
+export { ProxyFlowChartModel };

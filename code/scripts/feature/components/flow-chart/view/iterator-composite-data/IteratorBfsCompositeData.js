@@ -33,6 +33,9 @@ class IteratorBfsCompositeData extends Iterator {
     const vertices = super.getData();
     yield vertices[0];
     yield * bfsGraph(vertices[0].getAdjacentVertices(), vertices);
+    for (let vertex of vertices) {
+      vertex.setVisited(false);
+    }
   }
 }
 

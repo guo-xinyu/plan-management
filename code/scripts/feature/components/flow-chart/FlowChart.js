@@ -1,6 +1,6 @@
-import FlowChartController from './controller/FlowChartController.js';
-import FlowChartModel from './model/FlowChartModel.js';
-import FlowChartView from './view/FlowChartView.js';
+import { ControllerFlowChart } from './controller/ControllerFlowChart.js';
+import { ModelFlowChart } from './model/ModelFlowChart.js';
+import { ViewFlowChart } from './view/ViewFlowChart.js';
 
 const flowChartController = Symbol();
 const flowChartModel = Symbol();
@@ -15,9 +15,9 @@ class FlowChart {
     this[canvas] = canvasDom;
 
     // 私有成員
-    this[flowChartModel] = new FlowChartModel();
-    this[flowChartView] = new FlowChartView();
-    this[flowChartController] = new FlowChartController(this[canvas], this[flowChartModel], this[flowChartView]);
+    this[flowChartModel] = new ModelFlowChart();
+    this[flowChartView] = new ViewFlowChart(this[flowChartModel], this[canvas].getContext('2d'));
+    this[flowChartController] = new ControllerFlowChart(this[canvas], this[flowChartModel], this[flowChartView]);
   }
 }
 

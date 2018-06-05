@@ -5,8 +5,8 @@ const type = Symbol();
 const nodeRank = Symbol();
 
 class CompositeData extends Composite {
-  constructor(data, nodeRankNum) {
-    super(data);
+  constructor(name, data, gradeNum, rankNum, nodeRankNum) {
+    super(name, data, gradeNum, rankNum);
     this[type] = 'modelData';
     this[nodeRank] = nodeRankNum;
   }

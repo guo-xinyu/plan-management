@@ -1,8 +1,8 @@
-import { DecoratorCanvasRenderingContext2D } from '../decorator/DecoratorCanvasRenderingContext2D.js';
+// import { DecoratorCanvasRenderingContext2D } from '../decorator/DecoratorCanvasRenderingContext2D.js';
 
 class ConcreteCreatorView {
   constructor(ctx) {
-    if (!(ctx instanceof DecoratorCanvasRenderingContext2D)) {
+    if (!(ctx instanceof CanvasRenderingContext2D)) {
       throw new Error();
     }
     this._ctx = ctx;
@@ -61,10 +61,10 @@ class ConcreteCreatorView {
   _createPatternView(patternDesign) {
     const border = patternDesign.border;
     const color = patternDesign.color;
-    if (color.stroke) {
+    if (color && color.stroke) {
       this._drawBorder(border.path, border.width, border.style, color.stroke, this._ctx);
     }
-    if (color.fill) {
+    if (color && color.fill) {
       this._drawInner(border.path, color.fill, this._ctx);
     }
   }

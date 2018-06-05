@@ -2,9 +2,9 @@ const handler = Symbol();
 const id = Symbol();
 
 class Observer {
-  constructor(handler) {
+  constructor(oHandler) {
     this[id] = Symbol();
-    this[handler] = handler;
+    this[handler] = oHandler;
   }
   getId() {
     return this[id];

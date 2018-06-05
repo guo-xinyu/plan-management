@@ -8,11 +8,11 @@ const decoratorCanvasRenderingContext2D = Symbol();
 const designType = Symbol();
 
 class TeamDesign {
-  constructor(basePoint) {
+  constructor(basePoint, ctx) {
     this._basePoint = basePoint;
     this[teamPath] = new TeamPath();
     this[teamStructure] = new TeamStructure();
-    this[decoratorCanvasRenderingContext2D] = new DecoratorCanvasRenderingContext2D(new CanvasRenderingContext2D());
+    this[decoratorCanvasRenderingContext2D] = new DecoratorCanvasRenderingContext2D(ctx);
 
     this[designType] = {
       node: {
@@ -39,7 +39,7 @@ class TeamDesign {
     switch (state) {
       case this[designType].outputNode.text:
         return this[decoratorCanvasRenderingContext2D].cutString(oText, this[teamStructure].stepInterval -
-          this[teamStructure].this.nodeNameDecorateLineWidth - this[teamStructure].nodeNameTextLineBlank);
+          this[teamStructure].nodeNameDecorateLineWidth - this[teamStructure].nodeNameTextLineBlank);
       case this[designType].node.text:
         return oText;
       case this[designType].step.text:
@@ -60,7 +60,7 @@ class TeamDesign {
       case this[designType].node.text:
         color = this[teamStructure].themeColor;
         foulLineDirection = 'left';
-        basePoint.push(oBasePoint[0] + this[teamStructure].this.nodeNameDecorateLineWidth +
+        basePoint.push(oBasePoint[0] + this[teamStructure].nodeNameDecorateLineWidth +
           this[teamStructure].nodeNameTextLineBlank);
         basePoint.push(oBasePoint[1] + (this[teamStructure].nodeNameSize / 2));
         break;
@@ -104,18 +104,20 @@ class TeamDesign {
     switch (singleTextDesign.foulLineDirection) {
       case 'left':
         nodeContentBasePoint.push(singleTextDesign.basePoint[0]);
-        nodeContentBasePoint.push(singleTextDesign.basePoint[1] + (nameTextMeasureArea.height / 2));
+        nodeContentBasePoint.push(singleTextDesign.basePoint[1] + (singleTextDesign.fontSize / 2));
         break;
       case 'bottom':
         nodeContentBasePoint.push(singleTextDesign.basePoint[0] - (nameTextMeasureArea.width / 2));
-        nodeContentBasePoint.push(singleTextDesign.basePoint[1] - nameTextMeasureArea.height);
+        nodeContentBasePoint.push(singleTextDesign.basePoint[1] - singleTextDesign.fontSize);
         break;
       default:
         break;
     }
-    return this._compositePatternDesign(
-      [this[teamPath].fabricateRectanglePath(nodeContentBasePoint, nameTextMeasureArea)], '',
-      this[designType].node.text);
+    return [this._compositePatternDesign(
+      this[teamPath].fabricateRectanglePath(nodeContentBasePoint, {
+        width: nameTextMeasureArea.width,
+        height: singleTextDesign.fontSize
+      }), '', this[designType].node.text)];
   }
   _getLineDesign(oBasePoint, length, color, state) {
     let serialPatternDesign = [];
@@ -249,7 +251,7 @@ class TeamDesign {
     const singleTextDesign = this._compositeTextDesign(name, nodeContentBasePoint, this[designType].outputNode.text);
     textDesign.push(singleTextDesign);
     patternDesign.push(...this._fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color,
-      this[designType].output.decorationLine));
+      this[designType].outputNode.decorationLine));
     return { textDesign, patternDesign };
   }
   _fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color, state) {

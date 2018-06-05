@@ -1,24 +1,26 @@
-import { DecoratorCanvasRenderingContext2D } from '../decorator/DecoratorCanvasRenderingContext2D.js';
+// import { DecoratorCanvasRenderingContext2D } from '../decorator/DecoratorCanvasRenderingContext2D.js';
 import { DecoratorCompositeDataViewData } from '../decorator/DecoratorCompositeDataViewData.js';
-import { BuilderNodeView } from '../builder-node-view/BuilderNodeView.js';
+// import { BuilderNodeView } from '../builder-node-view/BuilderNodeView.js';
 import { IteratorBfsCompositeData } from '../iterator-composite-data/IteratorBfsCompositeData.js';
 import { FactoryViewData } from '../factory-view-data/FactoryViewData.js';
 import { CompositeData } from '../../model/composite-data/CompositeData.js';
+import { CreatorView } from '../factory-view/CreatorView.js';
 
 const drawContext = Symbol();
-const builderNodeView = Symbol();
+// const builderNodeView = Symbol();
 const teamConcept = Symbol();
 // const iteratorPreOrderComposite = Symbol();
 // const compositeData = Symbol();
 
 class DirectorDraw {
-  constructor(ctx) {
-    if (!(ctx instanceof DecoratorCanvasRenderingContext2D)) {
-      throw new Error('應以DecoratorCanvasRenderingContext2D的實例配置DirectorDraw。');
+  constructor(basePoint, ctx) {
+    if (!(ctx instanceof CanvasRenderingContext2D)) {
+      throw new Error('應以CanvasRenderingContext2D的實例配置DirectorDraw。');
     }
-    this[builderNodeView] = new BuilderNodeView();
+    // this[builderNodeView] = new BuilderNodeView();
     this[drawContext] = ctx;
-    this._factoryViewData = new FactoryViewData();
+    this._factoryView = new CreatorView(ctx);
+    this._factoryViewData = new FactoryViewData(basePoint, this[drawContext]);
   }
   draw(bwfWorkflowGroupNode, ctx, animationState = {}, basePoint = this._basePoint) {
     this._basePoint = basePoint;
@@ -50,6 +52,8 @@ class DirectorDraw {
       throw new Error('本導向器僅可根據CompositeData生成産品。');
     }
     const viewData = this._factoryViewData.produceViewData(composite, referNode);
+    this._factoryView.createView(viewData);
+    // console.log(viewData);
     return viewData;
   }
   build(data) {
@@ -70,7 +74,9 @@ class DirectorDraw {
       } else {
         decoratorCompositeDataViewDatas.push(new DecoratorCompositeDataViewData(composite, this._draw(composite)));
       }
+      composite.setVisited(true);
     }
+    // console.log(decoratorCompositeDataViewDatas);
     return decoratorCompositeDataViewDatas;
   }
 }

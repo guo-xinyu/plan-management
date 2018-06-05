@@ -15,7 +15,7 @@ class TeamPath {
   //   return this.fabricateStepSymbolPathState;
   // }
 
-  static fabricateRectanglePath(position, size) {
+  fabricateRectanglePath(position, size) {
     if (typeof position[0] !== 'number' || Number.isNaN(position[0]) ||
       typeof position[1] !== 'number' || Number.isNaN(position[0])) {
       throw new Error('fabricateRectanglePath方法的第一個參數須爲一個長度爲二的數字數組。');
@@ -29,7 +29,7 @@ class TeamPath {
     return path;
   }
 
-  static fabricateStepSymbolPath(position, radius, state, rotatingDegree) {
+  fabricateStepSymbolPath(position, radius, state, rotatingDegree) {
     let path = new Path2D();
     if (state === this.fabricateStepSymbolPathState.usual) {
       path.arc(position[0], position[1], radius, 0, Math.PI * 2);
@@ -89,7 +89,7 @@ class TeamPath {
     throw new Error('fabricateStepSymbolPath方法僅有“普通（usual）”、“中轉（transfer）”兩種狀態。');
   }
 
-  static fabricateStraightLinePath(startPoint, endPoint) {
+  fabricateStraightLinePath(startPoint, endPoint) {
     if (!(startPoint instanceof Array) || startPoint.length !== 2 ||
       !(endPoint instanceof Array) || startPoint.length !== 2) {
       throw new Error('fabricateStraightLinePath方法僅可以兩個長度爲二的數字數組畫綫。');

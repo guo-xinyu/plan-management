@@ -9,9 +9,9 @@ const hierarchy = [
   'step'
 ];
 
-function produceComponent(workflowData, componentHierarchy) {
+function produceComponent(workflowData, index, componentHierarchy, oNodeRank) {
   if (!(componentHierarchy instanceof Array)) {
-    throw new Error('produceComponent的第二個參數必須爲數組。');
+    throw new Error('produceComponent的第三個參數必須爲數組。');
   }
   let compositeList = [];
   let currentData = Object.assign(workflowData);
@@ -22,14 +22,16 @@ function produceComponent(workflowData, componentHierarchy) {
     }
     Reflect.deleteProperty(currentData, `${componentHierarchy[1]}List`);
   }
-
+  let nodeRank = componentHierarchy.length === 2 ? index : oNodeRank;
   const userData = factoryEntityData.produceUserData(currentData, currentData[`${componentHierarchy[0]}Name`]);
-
+  const rank = index;
   compositeList.push(
-    new CompositeData(userData.name, userData.entityData, hierarchy.length - componentHierarchy.length));
+    new CompositeData(
+      userData.name, userData.entityData, hierarchy.length - componentHierarchy.length, rank, nodeRank));
   if (children.length >= 1) {
-    for (let child of children) {
-      compositeList.push(...produceComponent(child, componentHierarchy.slice(1)));
+    for (let [childIndex, child] of children.entries()) {
+      // console.log(child);
+      compositeList.push(...produceComponent(child, childIndex, componentHierarchy.slice(1), nodeRank));
     }
   }
   return compositeList;
@@ -41,27 +43,27 @@ class FactoryCompositeData {
   // }
 
   produceCompositeData(workflowData) {
-    let composites = produceComponent(workflowData, hierarchy);
+    let composites = produceComponent(workflowData, 0, hierarchy);
     for (let composite of composites) {
       switch (composite.getGrade()) {
         case 0:
           for (let vertex of composites.filter(
-              value => value.getId() !== vertex.getId() &&
-              value.setEntityData().workflowId === composite.setEntityData().workflowId)) {
+              value => value.getId() !== composite.getId() &&
+              value.getEntityData().workflowId === composite.getEntityData().workflowId)) {
             composite.addAdjacentVertices(vertex.getId());
           }
           break;
         case 1:
           for (let vertex of composites.filter(
-              value => value.getId() !== vertex.getId() &&
-              value.setEntityData().nodeId === composite.setEntityData().nodeId)) {
+              value => value.getId() !== composite.getId() &&
+              value.getEntityData().nodeId === composite.getEntityData().nodeId)) {
             composite.addAdjacentVertices(vertex.getId());
           }
           break;
         case 2:
           for (let vertex of composites.filter(
-              value => value.getId() !== vertex.getId() &&
-              value.setEntityData().nodeId === composite.setEntityData().outputNodeId)) {
+              value => value.getId() !== composite.getId() &&
+              value.getEntityData().nodeId === composite.getEntityData().outputNodeId)) {
             composite.addAdjacentVertices(vertex.getId());
           }
           break;

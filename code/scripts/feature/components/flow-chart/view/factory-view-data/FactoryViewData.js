@@ -5,8 +5,9 @@ import { CompositeData } from '../../model/composite-data/CompositeData.js';
 // const teamDesign = Symbol();
 
 class FactoryViewData {
-  constructor() {
-    this._teamDesign = new TeamDesign();
+  constructor(basePoint, ctx) {
+    this._ctx = ctx;
+    this._teamDesign = new TeamDesign(basePoint, this._ctx);
     this._colors = [
       '#ee68a9',
       '#f5ba05',
@@ -31,10 +32,12 @@ class FactoryViewData {
       case 1:
         return {
           self: this._teamDesign.fabricateNodeDesign(composite.getNodeRank(),
-            this._colors[composite.getNodeRank() % this._colors.length], composite.getChildren(), composite.getName()),
+            this._colors[composite.getNodeRank() % this._colors.length],
+            composite.getAdjacentVertices().length, composite.getName()),
           refer: []
         };
       case 2:
+      // console.log(composite.getNodeRank());
         return {
           self: this._teamDesign.fabricateStepDesign(composite.getNodeRank(),
             this._colors[composite.getNodeRank() % this._colors.length], composite.getRank(), composite.getName(),
