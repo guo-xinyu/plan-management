@@ -53,16 +53,19 @@ class TeamDesign {
     let foulLineDirection = '';
     let text = this._cutString(oText, state);
     let basePoint = [];
+    let color = '';
 
     switch (state) {
       case this[designType].outputNode.text:
       case this[designType].node.text:
+        color = this[teamStructure].themeColor;
         foulLineDirection = 'left';
         basePoint.push(oBasePoint[0] + this[teamStructure].this.nodeNameDecorateLineWidth +
           this[teamStructure].nodeNameTextLineBlank);
         basePoint.push(oBasePoint[1] + (this[teamStructure].nodeNameSize / 2));
         break;
       case this[designType].step.text:
+        color = '#FFFFFF';
         foulLineDirection = 'bottom';
         basePoint.push(oBasePoint[0]);
         basePoint.push(oBasePoint[1] + this[teamStructure].bwfStepNameBlank);
@@ -75,6 +78,7 @@ class TeamDesign {
       text,
       basePoint,
       foulLineDirection,
+      color,
       fontSize: this[teamStructure].nodeNameSize,
       fontFamily: this[teamStructure].fontFamily
     };

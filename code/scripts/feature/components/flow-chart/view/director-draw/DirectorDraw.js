@@ -1,7 +1,9 @@
 import { DecoratorCanvasRenderingContext2D } from '../decorator/DecoratorCanvasRenderingContext2D.js';
 import { DecoratorCompositeDataViewData } from '../decorator/DecoratorCompositeDataViewData.js';
 import { BuilderNodeView } from '../builder-node-view/BuilderNodeView.js';
-import { IteratorPreOrderCompositeData } from '../iterator-composite-data/IteratorPreOrderCompositeData.js';
+import { IteratorBfsCompositeData } from '../iterator-composite-data/IteratorBfsCompositeData.js';
+import { FactoryViewData } from '../factory-view-data/FactoryViewData.js';
+import { CompositeData } from '../../model/composite-data/CompositeData.js';
 
 const drawContext = Symbol();
 const builderNodeView = Symbol();
@@ -16,6 +18,7 @@ class DirectorDraw {
     }
     this[builderNodeView] = new BuilderNodeView();
     this[drawContext] = ctx;
+    this._factoryViewData = new FactoryViewData();
   }
   draw(bwfWorkflowGroupNode, ctx, animationState = {}, basePoint = this._basePoint) {
     this._basePoint = basePoint;
@@ -42,14 +45,33 @@ class DirectorDraw {
     }
     // return addChildrenPath(bwfWorkflowGroupNode, bwfWorkflowGroupNode.children);
   }
+  _draw(composite, referNode) {
+    if (!(composite instanceof CompositeData)) {
+      throw new Error('本導向器僅可根據CompositeData生成産品。');
+    }
+    const viewData = this._factoryViewData.produceViewData(composite, referNode);
+    return viewData;
+  }
   build(data) {
-    if (!(data instanceof DecoratorCompositeDataViewData)) {
-      throw new Error('本導向器僅可根據DecoratorCompositeDataViewData生成産品。');
+    if (!(data instanceof Array)) {
+      throw new Error('本導向器僅可根據CompositeData的數組生成産品。');
     }
-    let iteratorPreOrderComposite = new IteratorPreOrderCompositeData(data);
-    for (let composite of iteratorPreOrderComposite) {
-      this.draw(composite);
+    let decoratorCompositeDataViewDatas = [];
+    let iteratorBfsComposite = new IteratorBfsCompositeData(data);
+    for (let composite of iteratorBfsComposite) {
+      if (composite.getGrade() === 0) {
+        decoratorCompositeDataViewDatas.push(new DecoratorCompositeDataViewData(composite));
+        continue;
+      }
+      let referNode = data.find(value => composite.getAdjacentVertices().includes(value.getId()) && value.getVisited());
+      if (referNode) {
+        decoratorCompositeDataViewDatas.push(
+          new DecoratorCompositeDataViewData(composite, this._draw(composite, referNode)));
+      } else {
+        decoratorCompositeDataViewDatas.push(new DecoratorCompositeDataViewData(composite, this._draw(composite)));
+      }
     }
+    return decoratorCompositeDataViewDatas;
   }
 }
 

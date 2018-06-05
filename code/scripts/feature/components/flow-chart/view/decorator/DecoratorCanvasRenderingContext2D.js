@@ -50,15 +50,15 @@ class DecoratorCanvasRenderingContext2D extends Decorator {
     }
     return cuttedString;
   }
-  static fillPath(path, fillStyle) {
-    this.fillStyle = fillStyle;
-    this.fill(path);
-  }
-  static strokePath(path, strokeStyle, lineWidth) {
-    this.strokeStyle = strokeStyle;
-    this.lineWidth = lineWidth;
-    this.stroke(path);
-  }
+  // static fillPath(path, fillStyle) {
+  //   this.fillStyle = fillStyle;
+  //   this.fill(path);
+  // }
+  // static strokePath(path, strokeStyle, lineWidth) {
+  //   this.strokeStyle = strokeStyle;
+  //   this.lineWidth = lineWidth;
+  //   this.stroke(path);
+  // }
 }
 
 export { DecoratorCanvasRenderingContext2D };
