@@ -54,12 +54,15 @@ class TeamDesign {
     let text = this._cutString(oText, state);
     let basePoint = [];
     let color = '';
+    let fontSize = 0;
+    let background = '';
 
     switch (state) {
       case this[designType].outputNode.text:
       case this[designType].node.text:
         color = this[teamStructure].themeColor;
         foulLineDirection = 'left';
+        fontSize = this[teamStructure].nodeNameSize;
         basePoint.push(oBasePoint[0] + this[teamStructure].nodeNameDecorateLineWidth +
           this[teamStructure].nodeNameTextLineBlank);
         basePoint.push(oBasePoint[1] + (this[teamStructure].nodeNameSize / 2));
@@ -67,8 +70,10 @@ class TeamDesign {
       case this[designType].step.text:
         color = '#FFFFFF';
         foulLineDirection = 'bottom';
+        background = this[teamStructure].themeColor;
+        fontSize = this[teamStructure].stepNameSize;
         basePoint.push(oBasePoint[0]);
-        basePoint.push(oBasePoint[1] + this[teamStructure].bwfStepNameBlank);
+        basePoint.push(oBasePoint[1] - this[teamStructure].bwfStepNameBlank);
         break;
       default:
         break;
@@ -79,7 +84,8 @@ class TeamDesign {
       basePoint,
       foulLineDirection,
       color,
-      fontSize: this[teamStructure].nodeNameSize,
+      background,
+      fontSize,
       fontFamily: this[teamStructure].fontFamily
     };
   }
@@ -96,28 +102,40 @@ class TeamDesign {
       }
     };
   }
+  _getTextWidth(multiLinesText, fontSize, fontFamily, util) {
+    let width = 0;
+    for (let lineText of multiLinesText) {
+      let newWidth = util.measureTextArea(lineText, fontSize, fontFamily).width;
+      if (newWidth > width) {
+        width = newWidth;
+      }
+    }
+    return width;
+  }
   _getTextRectangleDesign(singleTextDesign) {
-    const nameTextMeasureArea = this[decoratorCanvasRenderingContext2D].measureTextArea(singleTextDesign.text,
-      singleTextDesign.fontSize, singleTextDesign.fontFamily);
+    const multiLinesText = singleTextDesign.text.split('\n');
+    const textHeight = multiLinesText.length * singleTextDesign.fontSize;
+    const textWidth = this._getTextWidth(multiLinesText, singleTextDesign.fontSize, singleTextDesign.fontFamily,
+      this[decoratorCanvasRenderingContext2D]);
     let nodeContentBasePoint = [];
 
     switch (singleTextDesign.foulLineDirection) {
       case 'left':
         nodeContentBasePoint.push(singleTextDesign.basePoint[0]);
-        nodeContentBasePoint.push(singleTextDesign.basePoint[1] + (singleTextDesign.fontSize / 2));
+        nodeContentBasePoint.push(singleTextDesign.basePoint[1] - (textHeight / 2));
         break;
       case 'bottom':
-        nodeContentBasePoint.push(singleTextDesign.basePoint[0] - (nameTextMeasureArea.width / 2));
-        nodeContentBasePoint.push(singleTextDesign.basePoint[1] - singleTextDesign.fontSize);
+        nodeContentBasePoint.push(singleTextDesign.basePoint[0] - (textWidth / 2));
+        nodeContentBasePoint.push(singleTextDesign.basePoint[1] - textHeight);
         break;
       default:
         break;
     }
     return [this._compositePatternDesign(
       this[teamPath].fabricateRectanglePath(nodeContentBasePoint, {
-        width: nameTextMeasureArea.width,
-        height: singleTextDesign.fontSize
-      }), '', this[designType].node.text)];
+        width: textWidth,
+        height: textHeight
+      }), '', '', '', singleTextDesign.background)];
   }
   _getLineDesign(oBasePoint, length, color, state) {
     let serialPatternDesign = [];
@@ -165,26 +183,33 @@ class TeamDesign {
         }
         return serialPatternDesign;
       case this[designType].outputNode.decorationLine:
+        startPoint.push(...oBasePoint);
+        endPoint.push(startPoint[0]);
+        endPoint.push(startPoint[1] + length);
+        serialPatternDesign.push(this._compositePatternDesign(
+          this[teamPath].fabricateStraightLinePath(startPoint, endPoint),
+          this[teamStructure].nodeNameDecorateLineWidth, 'dashed', color, ''));
         return serialPatternDesign;
       default:
         break;
     }
-    return this[teamPath].fabricateStraightLinePath(startPoint, endPoint);
+    // return this[teamPath].fabricateStraightLinePath(startPoint, endPoint);
   }
   _getStepSymbolDesign(oBasePoint, color, stepSymbolState) {
+    const white = '#ffffff';
     let serialPatternDesign = [];
     switch (stepSymbolState) {
       case this.stateStep.usual:
         serialPatternDesign.push(this._compositePatternDesign(
           this[teamPath].fabricateStepSymbolPath(
             oBasePoint, this[teamStructure].stepGoLineWidth, this[teamPath].fabricateStepSymbolPathState.usual),
-          this[teamStructure].stepSymbolBorderWidth, 'solid', color, ''));
+          this[teamStructure].stepSymbolBorderWidth, 'solid', color, white));
         return serialPatternDesign;
       case this.stateStep.transfer:
         serialPatternDesign.push(this._compositePatternDesign(
           this[teamPath].fabricateStepSymbolPath(oBasePoint, this[teamStructure].stepGoLineWidth,
             this[teamPath].fabricateStepSymbolPathState.transfer, this[teamStructure].outputRotatingDegree),
-          this[teamStructure].stepSymbolBorderWidth, 'solid', this[teamStructure].themeColor, ''));
+          this[teamStructure].stepSymbolBorderWidth, 'solid', this[teamStructure].themeColor, white));
         return serialPatternDesign;
       default:
         break;
@@ -208,6 +233,7 @@ class TeamDesign {
     let textDesign = [];
     // 文字區域和豎綫裝飾的“綫稿”
     const singleTextDesign = this._compositeTextDesign(name, nodeContentBasePoint, this[designType].node.text);
+    // console.log(singleTextDesign);
     textDesign.push(singleTextDesign);
 
     patternDesign.push(...this._fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color,
@@ -228,7 +254,8 @@ class TeamDesign {
     let patternDesign = [];
     let textDesign = [];
     // 文字區域的“綫稿”
-    const singleTextDesign = this._compositeTextDesign(name, contentBasePoint, this[designType].node.text);
+    const singleTextDesign = this._compositeTextDesign(name, contentBasePoint, this[designType].step.text);
+    // console.log(singleTextDesign);
     textDesign.push(singleTextDesign);
     patternDesign.push(...this._getTextRectangleDesign(singleTextDesign));
     // 圓圈標志的“綫稿”
@@ -236,17 +263,21 @@ class TeamDesign {
     return { textDesign, patternDesign };
   }
   // 生産輸出節點處的“綫稿”
-  fabricateOutputNodeDesign(nodeRank, color, name) {
+  fabricateOutputNodeDesign(nodeRank, color, index, name) {
     const nodeBasePoint = this._getNodeBasePoint(nodeRank);
+    const contentBasePoint = [
+      nodeBasePoint[0] + (this[teamStructure].stepInterval * (((index * 2) + 1) / 2)),
+      nodeBasePoint[1] + this[teamStructure].stepGoLineYOffset
+    ];
     let patternDesign = [];
     let textDesign = [];
     // 分叉軌道部分的“綫稿”
-    patternDesign.push(...this._getLineDesign(nodeBasePoint, this[teamStructure].stepInterval, color,
+    patternDesign.push(...this._getLineDesign(contentBasePoint, this[teamStructure].stepInterval, color,
       this[designType].outputNode.railLine));
     // 文字區域和豎綫裝飾的“綫稿”
     const nodeContentBasePoint = [
-      nodeBasePoint[0] + (this[teamStructure].stepInterval * Math.cos(this[teamStructure].outputRotatingDegree)),
-      nodeBasePoint[1] + (this[teamStructure].stepInterval * Math.sin(this[teamStructure].outputRotatingDegree))
+      contentBasePoint[0] + (this[teamStructure].stepInterval * Math.cos(this[teamStructure].outputRotatingDegree)),
+      contentBasePoint[1] + (this[teamStructure].stepInterval * Math.sin(this[teamStructure].outputRotatingDegree))
     ];
     const singleTextDesign = this._compositeTextDesign(name, nodeContentBasePoint, this[designType].outputNode.text);
     textDesign.push(singleTextDesign);
@@ -257,10 +288,10 @@ class TeamDesign {
   _fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color, state) {
     let patternDesign = [];
     // 文字區域的“綫稿”
-    patternDesign.push(this._getTextRectangleDesign(singleTextDesign));
+    patternDesign.push(...this._getTextRectangleDesign(singleTextDesign));
 
     // 豎綫裝飾的“綫稿”
-    patternDesign.push(this._getLineDesign(nodeContentBasePoint, this[teamStructure].nodeNameSize, color,
+    patternDesign.push(...this._getLineDesign(nodeContentBasePoint, this[teamStructure].nodeNameSize, color,
       state));
     return patternDesign;
   }

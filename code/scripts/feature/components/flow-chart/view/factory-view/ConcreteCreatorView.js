@@ -7,13 +7,17 @@ class ConcreteCreatorView {
     }
     this._ctx = ctx;
   }
-  _drawText(text, position, color, font, baseLine, textAlign, ctx) {
+  _drawText(text, position, color, fontSize, fontFamily, baseLine, textAlign, ctx) {
+    const font = `${fontSize}px ${fontFamily}`;
+    const cut2Lines = text.split('\n');
     ctx.save();
     ctx.textBaseline = baseLine;
     ctx.textAlign = textAlign;
     ctx.font = font;
     ctx.fillStyle = color;
-    ctx.fillText(text, position[0], position[1]);
+    for (let [index, singleLine] of cut2Lines.entries()) {
+      ctx.fillText(singleLine, position[0], position[1] - ((cut2Lines.length - index - 1) * fontSize));
+    }
     ctx.restore();
   }
   _drawBorder(path, lineWidth, lineStyle, strokeColor, ctx) {
@@ -46,13 +50,14 @@ class ConcreteCreatorView {
     ctx.restore();
   }
   _createTextView(textDesign) {
-    const font = `${textDesign.fontSize}px ${textDesign.fontFamily}`;
     switch (textDesign.foulLineDirection) {
       case 'left':
-        this._drawText(textDesign.text, textDesign.basePoint, textDesign.color, font, 'middle', 'left', this._ctx);
+        this._drawText(textDesign.text, textDesign.basePoint, textDesign.color, textDesign.fontSize,
+          textDesign.fontFamily, 'middle', 'left', this._ctx);
         break;
       case 'bottom':
-        this._drawText(textDesign.text, textDesign.basePoint, textDesign.color, font, 'bottom', 'center', this._ctx);
+        this._drawText(textDesign.text, textDesign.basePoint, textDesign.color, textDesign.fontSize,
+          textDesign.fontFamily, 'bottom', 'center', this._ctx);
         break;
       default:
         break;
@@ -69,9 +74,12 @@ class ConcreteCreatorView {
     }
   }
   _createViewBaseDesign(design) {
-    this._createTextView(design.textDesign);
-    for (let patternDesign of design.patternDesign) {
-      this._createPatternView(patternDesign);
+    for (let section of design.patternDesign) {
+      this._createPatternView(section);
+    }
+    for (let section of design.textDesign) {
+      // console.log(section);
+      this._createTextView(section);
     }
   }
   createView(viewData) {

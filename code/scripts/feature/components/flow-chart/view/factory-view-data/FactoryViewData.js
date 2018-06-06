@@ -37,7 +37,7 @@ class FactoryViewData {
           refer: []
         };
       case 2:
-      // console.log(composite.getNodeRank());
+        // console.log(composite.getNodeRank());
         return {
           self: this._teamDesign.fabricateStepDesign(composite.getNodeRank(),
             this._colors[composite.getNodeRank() % this._colors.length], composite.getRank(), composite.getName(),
@@ -45,7 +45,8 @@ class FactoryViewData {
           ),
           refer: referComposite ? [
             this._teamDesign.fabricateOutputNodeDesign(composite.getNodeRank(),
-              this._colors[referComposite.getNodeRank() % this._colors.length], referComposite.getName())
+              this._colors[referComposite.getNodeRank() % this._colors.length],
+              composite.getRank(), referComposite.getName())
           ] : []
         };
       default:
