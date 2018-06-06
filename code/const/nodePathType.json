@@ -1,9 +1,0 @@
-{
-  "bwfWorkflowGroup": "bwfWorkflowGroup",
-  "bwfNodeGroup": "bwfNodeGroup",
-  "bwfRealNodeName": "bwfRealNodeName",
-  "bwfReferedNodeName": "bwfReferedNodeName",
-  "bwfStepGroup": "bwfStepGroup",
-  "bwfStepName": "bwfStepName",
-  "bwfStepSymbol": "bwfStepSymbol"
-}
