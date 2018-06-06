@@ -37,6 +37,39 @@ function produceComponent(workflowData, index, componentHierarchy, oNodeRank) {
   return compositeList;
 }
 
+function produceAdjacentVertices(composites) {
+  for (let composite of composites) {
+    switch (composite.getGrade()) {
+      case 0:
+        for (let vertex of composites.filter(
+            value => value.getId() !== composite.getId() && value.getEntityData().workflowId &&
+            value.getEntityData().workflowId === composite.getEntityData().workflowId)) {
+          composite.addAdjacentVertices(vertex.getId());
+        }
+        break;
+      case 1:
+        for (let vertex of composites.filter(
+            value => value.getId() !== composite.getId() && value.getEntityData().nodeId &&
+            value.getEntityData().nodeId === composite.getEntityData().nodeId)) {
+          composite.addAdjacentVertices(vertex.getId());
+        }
+        break;
+      case 2:
+        // console.log(composite);
+        for (let vertex of composites.filter(
+            value => value.getId() !== composite.getId() && value.getEntityData().nodeId &&
+            value.getEntityData().nodeId === composite.getEntityData().outputNodeId)) {
+          // console.log(vertex);
+          composite.addAdjacentVertices(vertex.getId());
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  return composites;
+}
+
 class FactoryCompositeData {
   // constructor() {
   //   this[factoryUserData] = new FactoryUserData();
@@ -44,34 +77,7 @@ class FactoryCompositeData {
 
   produceCompositeData(workflowData) {
     let composites = produceComponent(workflowData, 0, hierarchy);
-    for (let composite of composites) {
-      switch (composite.getGrade()) {
-        case 0:
-          for (let vertex of composites.filter(
-              value => value.getId() !== composite.getId() &&
-              value.getEntityData().workflowId === composite.getEntityData().workflowId)) {
-            composite.addAdjacentVertices(vertex.getId());
-          }
-          break;
-        case 1:
-          for (let vertex of composites.filter(
-              value => value.getId() !== composite.getId() &&
-              value.getEntityData().nodeId === composite.getEntityData().nodeId)) {
-            composite.addAdjacentVertices(vertex.getId());
-          }
-          break;
-        case 2:
-          for (let vertex of composites.filter(
-              value => value.getId() !== composite.getId() &&
-              value.getEntityData().nodeId === composite.getEntityData().outputNodeId)) {
-            composite.addAdjacentVertices(vertex.getId());
-          }
-          break;
-        default:
-          break;
-      }
-    }
-    return composites;
+    return produceAdjacentVertices(composites);
   }
 }
 
