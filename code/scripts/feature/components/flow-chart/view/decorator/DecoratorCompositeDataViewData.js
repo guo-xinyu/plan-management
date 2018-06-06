@@ -2,17 +2,20 @@ import { CompositeData } from '../../model/composite-data/CompositeData.js';
 import { Decorator } from '../../../../../design-pattern-character/decorator/Decorator.js';
 // import { FactoryViewData } from '../factory-view-data/FactoryViewData.js';
 
-// const viewData = Symbol();
+const viewData = Symbol();
 // const factoryViewData = Symbol();
 
 class DecoratorCompositeDataViewData extends Decorator {
-  constructor(compositeData, viewData) {
+  constructor(compositeData, oViewData) {
     if (!(compositeData instanceof CompositeData)) {
       throw new Error('CompositeDataViewDataDecorator僅可裝飾CompositeData');
     }
     super(compositeData);
     // this[factoryViewData] = new FactoryViewData();
-    this[viewData] = viewData;
+    this[viewData] = oViewData;
+  }
+  getViewData() {
+    return this[viewData];
   }
   // addPath(toAddPath) {
   //   if (!(toAddPath instanceof Path2D)) {

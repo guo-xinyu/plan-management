@@ -14,10 +14,11 @@ class FlowChart {
     }
     this[canvas] = canvasDom;
 
-    // 私有成員
-    this[flowChartModel] = new ModelFlowChart();
-    this[flowChartView] = new ViewFlowChart(this[flowChartModel], this[canvas].getContext('2d'));
-    this[flowChartController] = new ControllerFlowChart(this[canvas], this[flowChartModel], this[flowChartView]);
+    // 模型（model）觀察控制器（controller），視圖（view）觀察模型和控制器
+    this[flowChartController] = new ControllerFlowChart(this[canvas]);
+    this[flowChartModel] = new ModelFlowChart(this[flowChartController]);
+    this[flowChartView] = new ViewFlowChart(this[flowChartModel], this[flowChartController],
+      this[canvas].getContext('2d'));
   }
 }
 

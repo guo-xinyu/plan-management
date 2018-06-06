@@ -1,6 +1,6 @@
 // import { DecoratorCanvasRenderingContext2D } from '../decorator/DecoratorCanvasRenderingContext2D.js';
 
-class ConcreteCreatorView {
+class ConcreteBuilderView {
   constructor(ctx) {
     if (!(ctx instanceof CanvasRenderingContext2D)) {
       throw new Error();
@@ -82,7 +82,7 @@ class ConcreteCreatorView {
       this._createTextView(section);
     }
   }
-  createView(viewData) {
+  buildView(viewData) {
     for (let refer of viewData.refer) {
       this._createViewBaseDesign(refer);
     }
@@ -90,4 +90,4 @@ class ConcreteCreatorView {
   }
 }
 
-export { ConcreteCreatorView };
+export { ConcreteBuilderView };

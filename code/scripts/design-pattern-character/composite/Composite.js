@@ -60,15 +60,20 @@ class Composite {
   getAdjacentVertices() {
     return this._adjacentVertices;
   }
-  setVisited(isVisited) {
+  _setVisiting(isVisited) {
     this._visited = isVisited;
   }
-  getVisited() {
+  getVisiting() {
     return this._visited;
   }
   accept(visitor) {
-    visitor.visit(this);
-    this.setVisited(true);
+    // console.log(this);
+    this._setVisiting(true);
+    // console.log(this);
+    return visitor.visit(this);
+  }
+  visitorLeaved() {
+    this._setVisiting(false);
   }
 }
 

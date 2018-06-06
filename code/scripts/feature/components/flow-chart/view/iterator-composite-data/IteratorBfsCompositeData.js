@@ -5,7 +5,7 @@ function * bfsGraph(vertices, composites) {
   let adjacentVertices = [];
   const thisGradeComposites = composites.filter(value => vertices.includes(value.getId()));
   for (let composite of thisGradeComposites) {
-    if (!composite.getVisited()) {
+    if (!composite.getVisiting()) {
       adjacentVertices.push(...composite.getAdjacentVertices());
       yield composite;
     }
@@ -34,7 +34,9 @@ class IteratorBfsCompositeData extends Iterator {
     yield vertices[0];
     yield * bfsGraph(vertices[0].getAdjacentVertices(), vertices);
     for (let vertex of vertices) {
-      vertex.setVisited(false);
+      // console.log('離開');
+      // console.log(vertex);
+      vertex.visitorLeaved();
     }
   }
 }
