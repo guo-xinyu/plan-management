@@ -21,6 +21,9 @@ class BuilderViewData {
       '#f2811c'
     ];
   }
+  setBasePoint(basePoint) {
+    this._teamDesign.setBasePoint(basePoint);
+  }
   buildViewData(composite, referComposite) {
     if (!(composite instanceof CompositeData)) {
       throw new Error('buildViewData的原料僅可爲CompositeData。');
