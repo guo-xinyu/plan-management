@@ -5,6 +5,7 @@ import { Observer } from '../../../../design-pattern-character/observer/Observer
 // import { DecoratorCompositeDataViewData } from './decorator/DecoratorCompositeDataViewData.js';
 // import { IteratorPreOrderCompositeData } from './iterator-composite-data/IteratorPreOrderCompositeData.js';
 import { DirectorDraw } from './director-draw/DirectorDraw.js';
+import { TeamStructure } from './builder-view-data/workshop-design/TeamStructure.js';
 // import { DecoratorCanvasRenderingContext2D } from './decorator/DecoratorCanvasRenderingContext2D.js';
 
 // const handleModelUpdate = Symbol();
@@ -12,6 +13,7 @@ import { DirectorDraw } from './director-draw/DirectorDraw.js';
 const drawContext = Symbol();
 const controller = Symbol();
 const themeColor = '#8c8c8c';
+const originBasePoint = [5, 5];
 
 class ViewFlowChart extends View {
   constructor(flowChartModel, controllerClass, ctx) {
@@ -24,11 +26,12 @@ class ViewFlowChart extends View {
     super(flowChartModel, themeColor);
     this[controller] = controllerClass;
     super.initObserverModelUpdate(this._handleModelUpdate.bind(this));
-    this._basePoint = [5, 5];
+    this._basePoint = originBasePoint;
     // this[drawDirector] = new DrawDirector();
     this[drawContext] = ctx;
     this._data = {};
     this._initObserverControllerCommandDrag();
+    this._initObserverControllerCommandJumpToNode();
     // console.log(this[drawContext]);
     // this[modelClass] = flowChartModel;
   }
@@ -36,12 +39,32 @@ class ViewFlowChart extends View {
     let obs = new Observer(this._transformBasePoint.bind(this));
     this[controller].addObserver(obs, this[controller].getObserverTypes().dragChart);
   }
+  _initObserverControllerCommandJumpToNode() {
+    let obs = new Observer(this._jumpToTheNode.bind(this));
+    this[controller].addObserver(obs, this[controller].getObserverTypes().jumpToRefer);
+  }
   _handleModelUpdate(data) {
     if (!(data instanceof Array)) {
       throw new Error('請輸入DecoratorCompositeDataViewData的數組。');
     }
     this._data = data;
     this._draw(this._basePoint);
+  }
+  _jumpToTheNode(id) {
+    const structure = new TeamStructure();
+    for (let value of this._data) {
+      if (value.getId() === id) {
+        // console.log(id);
+        // this._basePoint[0] = 0;
+        // this._basePoint[1] = structure.nodeGroupHeight * value.getNodeRank();
+        const transform = [
+          originBasePoint[0] - this._basePoint[0],
+          originBasePoint[1] - (structure.nodeGroupHeight * value.getNodeRank()) - this._basePoint[1]
+        ];
+        this._transformBasePoint({ transform, state: 'finished' });
+        break;
+      }
+    }
   }
   _transformBasePoint({ transform, state }) {
     this[drawContext].clearRect(0, 0, this[drawContext].canvas.getAttribute('width'),
@@ -58,6 +81,7 @@ class ViewFlowChart extends View {
         this._basePoint[0] + transform[0],
         this._basePoint[1] + transform[1]
       ];
+
       this._draw(this._basePoint);
     }
   }

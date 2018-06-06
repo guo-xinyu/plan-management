@@ -263,7 +263,7 @@ class TeamDesign {
     return { textDesign, patternDesign };
   }
   // 生産輸出節點處的“綫稿”
-  fabricateOutputNodeDesign(nodeRank, color, index, name) {
+  fabricateOutputNodeDesign(nodeRank, color, index, name, id) {
     const nodeBasePoint = this._getNodeBasePoint(nodeRank);
     const contentBasePoint = [
       nodeBasePoint[0] + (this[teamStructure].stepInterval * (((index * 2) + 1) / 2)),
@@ -283,7 +283,7 @@ class TeamDesign {
     textDesign.push(singleTextDesign);
     patternDesign.push(...this._fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color,
       this[designType].outputNode.decorationLine));
-    return { textDesign, patternDesign };
+    return { id, textDesign, patternDesign };
   }
   _fabricateNodeNameDesign(nodeContentBasePoint, singleTextDesign, color, state) {
     let patternDesign = [];

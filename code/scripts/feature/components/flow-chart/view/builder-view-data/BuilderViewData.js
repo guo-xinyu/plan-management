@@ -45,7 +45,7 @@ class BuilderViewData {
           refer: referComposite ? [
             this._teamDesign.fabricateOutputNodeDesign(composite.getNodeRank(),
               this._colors[referComposite.getNodeRank() % this._colors.length],
-              composite.getRank(), referComposite.getName())
+              composite.getRank(), referComposite.getName(), referComposite.getId())
           ] : []
         };
       default:

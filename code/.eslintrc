@@ -56,7 +56,7 @@
       "property"
     ],
     "eqeqeq": "error",
-    "no-alert": "error",
+    "no-alert": "warn",
     "no-caller": "error",
     "no-case-declarations": "error",
     "no-div-regex": "error",

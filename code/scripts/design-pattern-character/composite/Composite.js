@@ -7,7 +7,7 @@ const rank = Symbol();
 
 class Composite {
   constructor(compositeName, data, gradeNum, rankNum) {
-    this[id] = Math.random();
+    this[id] = Symbol();
     this[name] = compositeName;
     // 在整個圖中的品秩（本頂點與根頂點的最短距離）
     this[grade] = gradeNum;
@@ -39,9 +39,9 @@ class Composite {
     return this[rank];
   }
   addAdjacentVertices(id, preId) {
-    // if (typeof id !== 'symbol') {
-    //   throw new Error('Composite的鄰接頂點鏈表僅可儲存Composite的id。');
-    // }
+    if (typeof id !== 'symbol') {
+      throw new Error('Composite的鄰接頂點鏈表僅可儲存Composite的id。');
+    }
     if (preId && typeof preId !== 'symbol') {
       throw new Error('請以數字指定鄰接頂點要插入的位置。');
     }

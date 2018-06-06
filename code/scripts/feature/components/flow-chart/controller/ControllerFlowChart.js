@@ -1,11 +1,12 @@
 import { Controller } from '../../../../design-pattern-character/model-view-controller/Controller.js';
 import { CommandDragFlowChart } from './command-flow-chart/CommandDragFlowChart.js';
+import { CommandCheckDetail } from './command-flow-chart/CommandCheckDetail.js';
+import { CommandJumpRefer } from './command-flow-chart/CommandJumpRefer.js';
 
 const observerTypes = Symbol();
 
 function hitPattern(x, y, patternDesigns, canvasDom) {
   if (!patternDesigns) {
-    // console.log(patternDesigns);
     return false;
   }
   for (let pattern of patternDesigns) {
@@ -15,36 +16,35 @@ function hitPattern(x, y, patternDesigns, canvasDom) {
   }
 }
 
-function hitOnChart(x, y, datas, ctx) {
+function hitRefer(x, y, datas, ctx) {
   for (let data of datas) {
     if (!data.getViewData()) {
       continue;
     }
     for (let refer of data.getViewData().refer) {
       if (hitPattern(x, y, refer.patternDesign, ctx)) {
-        return true;
+        return refer;
       }
     }
+  }
+}
+
+function hitEntitySelf(x, y, datas, ctx) {
+  for (let data of datas) {
+    if (!data.getViewData()) {
+      continue;
+    }
     if (hitPattern(x, y, data.getViewData().self.patternDesign, ctx)) {
-      return true;
+      return data;
     }
   }
 }
 
 function drag(moveEvent, mouseDownX, mouseDownY, command, state) {
-  // if (!selectedNode) {
-  // let basePoint = [
   const moveHorizon = moveEvent.offsetX - mouseDownX;
   const moveVertical = moveEvent.offsetY - mouseDownY;
-  // console.log(mouseDownX, mouseDownY);
-  // console.log(moveEvent.offsetX, moveEvent.offsetY);
 
   command.execute(moveHorizon, moveVertical, state);
-  // ];
-  //   drawControl.draw(that.constructBwfWorkflowGroupNode(that.bwfWorkflow), ctx, {}, basePoint);
-  //   return;
-  // }
-
 }
 
 class ControllerFlowChart extends Controller {
@@ -54,9 +54,12 @@ class ControllerFlowChart extends Controller {
     }
     super();
     this[observerTypes] = {
-      dragChart: Symbol()
+      dragChart: Symbol(),
+      jumpToRefer: Symbol()
     };
     this._commandFlowChart = new CommandDragFlowChart();
+    this._commandCheckDetail = new CommandCheckDetail();
+    this._commandJumpRefer = new CommandJumpRefer();
     this._viewData = {};
     this._flowChartDom = flowChartDom;
     this._initEventHandler(flowChartDom);
@@ -70,7 +73,10 @@ class ControllerFlowChart extends Controller {
       const startPoint = [
         event.offsetX, event.offsetY
       ];
-      if (hitOnChart(...startPoint, this._viewData, ctx)) {
+      if (hitEntitySelf(...startPoint, this._viewData, ctx)) {
+        return;
+      }
+      if (hitRefer(...startPoint, this._viewData, ctx)) {
         return;
       }
       // console.log(event.offsetX, event.offsetY);
@@ -88,6 +94,21 @@ class ControllerFlowChart extends Controller {
         drag(mouseUpEvent, ...startPoint, that._commandFlowChart, 'finished');
       }
       flowChartDom.addEventListener('mouseup', onMouseUp);
+    });
+
+    flowChartDom.addEventListener('dblclick', event => {
+      const startPoint = [
+        event.offsetX, event.offsetY
+      ];
+      let ctx = flowChartDom.getContext('2d');
+      const hitSelfResult = hitEntitySelf(...startPoint, this._viewData, ctx);
+      if (hitSelfResult) {
+        this._commandCheckDetail.execute(hitSelfResult.getEntityData());
+      }
+      const hitReferResult = hitRefer(...startPoint, this._viewData, ctx);
+      if (hitReferResult) {
+        this._commandJumpRefer.execute(hitReferResult.id);
+      }
     });
 
   }
@@ -108,6 +129,9 @@ class ControllerFlowChart extends Controller {
     switch (type) {
       case this[observerTypes].dragChart:
         this._commandFlowChart.add(command);
+        break;
+      case this[observerTypes].jumpToRefer:
+        this._commandJumpRefer.add(command);
         break;
       default:
         break;
