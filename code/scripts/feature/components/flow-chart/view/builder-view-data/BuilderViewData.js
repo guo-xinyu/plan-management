@@ -12,11 +12,11 @@ class BuilderViewData {
       '#ee68a9',
       '#f5ba05',
       '#35cbd5',
-      '#2496f5',
-      '#f1e12b',
       '#c05fd5',
       '#8dc434',
+      '#f1e12b',
       '#7c81e6',
+      '#2496f5',
       '#57dca5',
       '#f2811c'
     ];

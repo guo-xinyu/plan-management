@@ -9,12 +9,15 @@ class Command {
       singleCommand.command();
     }
   }
+  getCommandStack() {
+    return this[commandStack];
+  }
   unexecute() {
 
   }
   add(singleCommand) {
-    if (typeof singleCommand !== 'function') {
-      throw new Error('命令僅可爲函數。');
+    if (typeof singleCommand !== 'object') {
+      throw new Error('命令僅可爲對象。');
     }
     this[commandStack].push({
       id: Symbol(),
