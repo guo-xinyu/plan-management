@@ -2,11 +2,9 @@ import { View } from '../../../../design-pattern-character/model-view-controller
 import { ModelFlowChart } from '../model/ModelFlowChart.js';
 import { ControllerFlowChart } from '../controller/ControllerFlowChart.js';
 import { Observer } from '../../../../design-pattern-character/observer/Observer.js';
-// import { DecoratorCompositeDataViewData } from './decorator/DecoratorCompositeDataViewData.js';
-// import { IteratorPreOrderCompositeData } from './iterator-composite-data/IteratorPreOrderCompositeData.js';
 import { DirectorDraw } from './director-draw/DirectorDraw.js';
 import { TeamStructure } from './builder-view-data/workshop-design/TeamStructure.js';
-// import { DecoratorCanvasRenderingContext2D } from './decorator/DecoratorCanvasRenderingContext2D.js';
+import { StateNormalDirectorDraw } from './state-director-draw/StateNormalDirectorDraw.js';
 
 // const handleModelUpdate = Symbol();
 // const drawDirector = Symbol();
@@ -30,6 +28,9 @@ class ViewFlowChart extends View {
     // this[drawDirector] = new DrawDirector();
     this[drawContext] = ctx;
     this._data = {};
+    this._normalDrawState = new StateNormalDirectorDraw();
+    this._drawDirector = new DirectorDraw(this._basePoint, this[drawContext]);
+    this._drawDirector.setState(this._normalDrawState);
     this._initObserverControllerCommandDrag();
     this._initObserverControllerCommandJumpToNode();
     // console.log(this[drawContext]);
@@ -91,8 +92,9 @@ class ViewFlowChart extends View {
     }
   }
   _draw(basePoint) {
-    const director = new DirectorDraw(basePoint, this[drawContext]);
-    this[controller].setViewData(director.build(this._data));
+    this._drawDirector.setBasePoint(basePoint);
+    // const director = new DirectorDraw(basePoint, this[drawContext]);
+    this[controller].setViewData(this._drawDirector.build(this._data));
     // let iteratorPreOrderCompositeData = new IteratorPreOrderCompositeData(data);
     // for (let composite of iteratorPreOrderCompositeData) {
     //   this[drawDirector](composite);

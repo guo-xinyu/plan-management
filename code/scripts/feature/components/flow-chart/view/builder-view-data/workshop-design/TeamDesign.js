@@ -35,6 +35,9 @@ class TeamDesign {
       transfer: Symbol()
     };
   }
+  setBasePoint(basePoint) {
+    this._basePoint = basePoint;
+  }
   _cutString(oText, state) {
     switch (state) {
       case this[designType].outputNode.text:
