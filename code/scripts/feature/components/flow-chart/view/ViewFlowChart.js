@@ -11,7 +11,7 @@ import { StateNormalDirectorDraw } from './state-director-draw/StateNormalDirect
 const drawContext = Symbol();
 const controller = Symbol();
 const themeColor = '#8c8c8c';
-const originBasePoint = [5, 5];
+const originBasePoint = [25, 25];
 
 class ViewFlowChart extends View {
   constructor(flowChartModel, controllerClass, ctx) {
