@@ -45,7 +45,7 @@ const flowData = {
   }, {
     nodeId: 570,
     workflowId: 412,
-    nodeName: 'To Libarary',
+    nodeName: 'To Library',
     firstNode: 'N',
     stepList: [{
       stepId: 593,
@@ -62,7 +62,7 @@ const flowData = {
     }, {
       stepId: 595,
       nodeId: 570,
-      stepName: 'libarary',
+      stepName: 'library',
       execOrder: 3,
       effDate: '2018-05-06 00:00:00'
     }, {
